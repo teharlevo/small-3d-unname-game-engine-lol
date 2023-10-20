@@ -24,12 +24,12 @@ public class Mash {
         float height = (float)Window.height()/tex.height();
         System.out.println(width);
         vertices =new float[]{
-        -height, -width,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,
-         height, -width,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 0.0f,0.0f,
-         height,  width,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 1.0f,0.0f,
-         height,  width,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 1.0f,0.0f,
-        -height,  width,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 1.0f,0.0f,
-        -height, -width,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,}; 
+        -width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,
+         width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 0.0f,0.0f,
+         width,  height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 1.0f,0.0f,
+         width,  height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 1.0f,0.0f,
+        -width,  height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 1.0f,0.0f,
+        -width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,}; 
         textuere = tex;
     }
 
@@ -38,12 +38,12 @@ public class Mash {
         float width = (float)Window.width()  /textuere.width();;
         float height = (float)Window.height()/textuere.height();
         vertices =new float[]{
-        -1.0f, -1.0f,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,
-         1.0f, -1.0f,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 0.0f,0.0f,
-         1.0f,  1.0f,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 1.0f,0.0f,
-         1.0f,  1.0f,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 1.0f,0.0f,
-        -1.0f,  1.0f,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 1.0f,0.0f,
-        -1.0f, -1.0f,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,}; 
+        -width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,
+         width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 0.0f,0.0f,
+         width,  height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 1.0f,0.0f,
+         width,  height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 1.0f,0.0f,
+        -width,  height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 1.0f,0.0f,
+        -width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,}; 
     }
    
     public float[] getVertices(){

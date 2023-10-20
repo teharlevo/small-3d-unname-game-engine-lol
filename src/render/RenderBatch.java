@@ -7,7 +7,6 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import main.Assets;
 import modeling.Model;
 
 public class RenderBatch {
@@ -32,14 +31,10 @@ public class RenderBatch {
         model = _model;
         init();
         if(model.getMash().getTexture() != null ){
-            //tex[0] = model.getMash().getTexture();
             texNum++;
         }
     }
-
-
-
-    //private Texture tex[] = new Texture[8];
+    
     private int texNum = 0;
 
     public Shader s;
@@ -104,9 +99,7 @@ public class RenderBatch {
         draw();
 
         glBindVertexArray(0);
-        for (int i = 0; i < texNum; i++) {
-            model.getTexture().unbind();
-        }
+        if(model == null){model.getTexture().unbind();}
         glBindTexture(GL_TEXTURE_2D, 0);
 
         s.detach();
@@ -128,11 +121,8 @@ public class RenderBatch {
     }
 
     private void sandInfrmasihnToGPU(Camrea c,Model m){
-        for (int i = 0; i < texNum; i++) {
-            
-            glActiveTexture(GL_TEXTURE0 + i);
-            model.getTexture().bind();
-        }
+        
+        if(model != null){model.getTexture().bind();model.getTexture().bind();}
         s.uploadMat4f("uView",c.getViewMatrix());
         s.uploadMat4f("uModel",m.getMatrix() );
         s.uploadMat4f("uProjection",

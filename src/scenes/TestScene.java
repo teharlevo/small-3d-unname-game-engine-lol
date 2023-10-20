@@ -1,4 +1,4 @@
-package scenes;
+
 
 import java.util.Random;
 
@@ -8,24 +8,26 @@ import main.Entity;
 import org.jbox2d.dynamics.BodyType;
 import org.joml.Vector3f;
 
-import _2DPhysics.BoxCollider;
 import _2DPhysics.Physics2D;
-import _2DPhysics.RigidBody;
 import main.Input;
 import main.Scene;
 import main.Window;
 import modeling.Model;
+import render.FrameBuffer;
 
 public class TestScene extends Scene{
+
+    FrameBuffer fb;
     
     public static void main(String[] args){
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
         Window.scenes[0] = new TestScene();
-        new Window(600,600,"test");
+        new Window(900,600,"test");
     }
     
     public void init() {
+        fb = new FrameBuffer(Window.width(), Window.height());
         Random r = new Random();
         float dis = 20;
         String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
@@ -38,10 +40,15 @@ public class TestScene extends Scene{
             entt.angleZ = r.nextFloat(-180, 180);
             entt.addComponent(new Model(modelName[r.nextInt(modelName.length)],0,0,0));
         }
+        Entity entt = new Entity();
+        entt.addComponent(new Model(fb.getTexturex(),0,0,-1));
     }
     
     public void update(float dt) {
         
+        fb.bind();
+        renderer.render();
+        fb.unbind();
         float x = 0;
         float y = 0;
         

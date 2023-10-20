@@ -30,7 +30,7 @@ public class FrameBuffer {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    public Texture getTextureex(){
+    public Texture getTexturex(){
         return tex;
     }
 
@@ -40,7 +40,7 @@ public class FrameBuffer {
 
     public void bind() {
         glBindFramebuffer(GL_FRAMEBUFFER, fboID);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     public void unbind() {

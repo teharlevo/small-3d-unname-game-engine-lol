@@ -21,6 +21,10 @@ public class Model extends Component{
     private float angleY;
     private float angleZ;
 
+    public Model(String mashName,float x,float y,float z,Renderer renderer){
+        createFanc(Assets.getModelMesh(mashName),x,y,z,renderer);
+    } 
+
     public Model(String mashName,float x,float y,float z){
         createFanc(Assets.getModelMesh(mashName),x,y,z,Window.getCurrentScene().renderer);
     } 
@@ -31,6 +35,14 @@ public class Model extends Component{
 
     public Model(Mash _mash,float x,float y,float z,Renderer renderer){
         createFanc(_mash,x,y,z,renderer);
+    } 
+
+    public Model(Texture tex,float x,float y,float z){
+        createFanc(new Mash(tex),x,y,z,Window.getCurrentScene().renderer);
+    } 
+
+    public Model(Texture tex,float x,float y,float z,Renderer renderer){
+        createFanc(new Mash(tex),x,y,z,renderer);
     } 
 
     private void createFanc(Mash _mash,float x,float y,float z,Renderer renderer){
