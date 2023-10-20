@@ -1,5 +1,21 @@
 package render;
 
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDrawArrays;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glBufferSubData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.FloatBuffer;
@@ -30,12 +46,7 @@ public class RenderBatch {
         s = shader;
         model = _model;
         init();
-        if(model.getMash().getTexture() != null ){
-            texNum++;
-        }
     }
-    
-    private int texNum = 0;
 
     public Shader s;
 
@@ -99,7 +110,7 @@ public class RenderBatch {
         draw();
 
         glBindVertexArray(0);
-        if(model == null){model.getTexture().unbind();}
+        if(model.getTexture() != null){model.getTexture().unbind();}
         glBindTexture(GL_TEXTURE_2D, 0);
 
         s.detach();
@@ -122,10 +133,36 @@ public class RenderBatch {
 
     private void sandInfrmasihnToGPU(Camrea c,Model m){
         
-        if(model != null){model.getTexture().bind();model.getTexture().bind();}
+        if(model.getTexture() != null){model.getTexture().bind();}
         s.uploadMat4f("uView",c.getViewMatrix());
         s.uploadMat4f("uModel",m.getMatrix() );
         s.uploadMat4f("uProjection",
         c.getProjectionMarix());
+
+    }
+
+    private void g(Texture[] tex,float[] floats,String[] floatsNames,
+        int[] ints,String[] intsNames){
+
+        int texsLength = tex.length;
+        if(texsLength > 7){
+            texsLength = 7;
+        }
+        for (int i = 0; i < tex.length; i++) {
+            glActiveTexture(GL_TEXTURE0 + 1 + i);
+            tex[i].bind();
+        }
+        
+        if(floats != null){
+            for (int i = 0; i < floats.length; i++) {
+                s.uploadfloat(floatsNames[i], floats[i]);
+            }
+        }
+
+        if(ints != null){
+            for (int i = 0; i < ints.length; i++) {
+                s.uploadInt(intsNames[i], ints[i]);
+            }
+        }
     }
 }

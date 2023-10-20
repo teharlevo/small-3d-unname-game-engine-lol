@@ -2,10 +2,7 @@
 
 import java.util.Random;
 
-import main.Assets;
 import main.Entity;
-
-import org.jbox2d.dynamics.BodyType;
 import org.joml.Vector3f;
 
 import _2DPhysics.Physics2D;
@@ -14,10 +11,12 @@ import main.Scene;
 import main.Window;
 import modeling.Model;
 import render.FrameBuffer;
+import render.Renderer;
 
 public class TestScene extends Scene{
 
     FrameBuffer fb;
+    Renderer crt,g;
     
     public static void main(String[] args){
         Window.scenes = new Scene[1];
@@ -28,6 +27,7 @@ public class TestScene extends Scene{
     
     public void init() {
         fb = new FrameBuffer(Window.width(), Window.height());
+        g = new Renderer("default", cam);
         Random r = new Random();
         float dis = 20;
         String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
@@ -38,17 +38,23 @@ public class TestScene extends Scene{
             entt.angleX = r.nextFloat(-180, 180);
             entt.angleY = r.nextFloat(-180, 180);
             entt.angleZ = r.nextFloat(-180, 180);
-            entt.addComponent(new Model(modelName[r.nextInt(modelName.length)],0,0,0));
+            entt.addComponent(new Model(modelName[r.nextInt(modelName.length)],0,0,0,g));
         }
+        crt = new Renderer("outline", cam);
         Entity entt = new Entity();
-        entt.addComponent(new Model(fb.getTexturex(),0,0,-1));
+        entt.addComponent(new Model(fb.getTexturex(),0,0,-1,crt));
+
+        fb.bind();
+        g.render();
+        fb.unbind();
     }
     
     public void update(float dt) {
-        
+        g.render();
         fb.bind();
-        renderer.render();
+        g.render();
         fb.unbind();
+        crt.render();
         float x = 0;
         float y = 0;
         

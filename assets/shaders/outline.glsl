@@ -55,12 +55,12 @@ void main()
         texColor  = texColor/0.8f;
         float avg = (texColor.r + texColor.b + texColor.g) / 3;
 
-        if(avg < 0.01f){
-            color = vec4(0.0f,0.0f,0.0f,1.0f);
-        }
-        else{
+        if(avg < 0.1f){
             int id = int(fTexId);
             color = fColor * texture(uTex_Sampler[id], fTexCoords);
+        }
+        else{
+            color = vec4(1.0f,0.0f,0.0f,1.0f);
         }
         //color = vec4(0.0f,0.0f,0.0f,1.0f);
     } 
