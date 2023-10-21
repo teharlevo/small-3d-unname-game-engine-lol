@@ -17,10 +17,6 @@ void main()
 {
     fColor = aColor;
     fTexCoords = aTexCoords;
-    fTexCoords = fTexCoords * 2 - 1;
-    vec2 offset = fTexCoords/1;
-    fTexCoords = fTexCoords + fTexCoords * offset * offset;
-    fTexCoords = fTexCoords * 0.5 + 0.5;
     fTexId = aTexId;
     gl_Position = uProjection * uView * uModel * vec4(aPos, 1.0);
 }
@@ -38,16 +34,23 @@ in float fTexId;
 out vec4 color;
 
 void main()
-{
+{   
+    vec2 uv = fTexCoords;
+    uv = uv * 2 - 1;
+    vec2 offset = uv/0.7;
+    uv = uv + uv * offset * offset;
+    uv *= 1.5;
+    uv = uv * 0.5 + 0.5;
     if(fTexId == -1){
         color = fColor;
     }else{
         int id = int(fTexId);
-        if(fTexCoords.x >= 0 && fTexCoords.x <= 1 && fTexCoords.y >= 0 && fTexCoords.y <= 1){
-            color = fColor * texture(uTex_Sampler[id], fTexCoords);
+        if(uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1){
+            color = fColor * texture(uTex_Sampler[id], uv);
         }
         else{
             color = vec4(0,0,0,1);
         }
+        //color = vec4(uv.x,uv.y,0,1);
     }
 }

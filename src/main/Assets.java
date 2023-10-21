@@ -7,6 +7,7 @@ import java.util.Map;
 import modeling.Mash;
 import modeling.ModelLoader;
 import render.*;
+import Sound.*;
 
 public class Assets {
 
@@ -102,24 +103,24 @@ public class Assets {
     }
     
 
-    //public static void newSound(String path){
-    //    String name = new File(path).getName();
-    //    name = name.substring(0, name.indexOf("."));
-    //    int soundID = Sound.importSound(path);
-    //    SoundMaster.addSound(soundID,name);
-    //}
-//
-    //public static void folderSounds(String path){
-    //    File folder = new File(path);
-    //    for (File fileEntry : folder.listFiles()) {
-    //        newSound(fileEntry.getAbsolutePath());
-    //    }
-    //}
-//
+    public static void newSound(String path){
+        String name = new File(path).getName();
+        name = name.substring(0, name.indexOf("."));
+        int soundID = Sound.importSound(path);
+        SoundMaster.addSound(soundID,name);
+    }
+
+    public static void folderSounds(String path){
+        File folder = new File(path);
+        for (File fileEntry : folder.listFiles()) {
+            newSound(fileEntry.getAbsolutePath());
+        }
+    }
+
     public static void totalImport(String path){
         folderImages(path + "/images"  );
         folderShaders(path + "/shaders");
         folderModels(path + "/models");
-        //folderSounds(path + "/sounds");
+        folderSounds(path + "/sounds");
     }
 }

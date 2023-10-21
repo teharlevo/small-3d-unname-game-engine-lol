@@ -1,10 +1,11 @@
 
-
 import java.util.Random;
 
 import main.Entity;
 import org.joml.Vector3f;
 
+import Sound.Sound;
+import Sound.SoundMaster;
 import _2DPhysics.Physics2D;
 import main.Input;
 import main.Scene;
@@ -22,16 +23,16 @@ public class TestScene extends Scene{
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
         Window.scenes[0] = new TestScene();
-        new Window(900,600,"test");
+        new Window(600,600,"test");
     }
     
     public void init() {
         fb = new FrameBuffer(Window.width(), Window.height());
         g = new Renderer("default", cam);
         Random r = new Random();
-        float dis = 20;
+        float dis = 5;
         String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             Entity entt = new Entity();
             entt.pos = new Vector3f(
                 r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
@@ -48,12 +49,13 @@ public class TestScene extends Scene{
         g.render();
         fb.unbind();
     }
-    
+    int Music = 0;
     public void update(float dt) {
-        g.render();
         fb.bind();
         g.render();
+        crt.render();
         fb.unbind();
+        g.render();
         crt.render();
         float x = 0;
         float y = 0;
@@ -101,5 +103,17 @@ public class TestScene extends Scene{
 
         cam.setAngle(cam.getAngleX() + angleX * dt, cam.getAngleY() + angleY * dt,cam.getAngleZ() + angleZ * dt);
 
+        if(Input.getKeyPressNow("i")){
+            SoundMaster.playSound("2");
+        }
+        if(Input.getKeyPressNow("o")){
+            SoundMaster.playSound("apple");
+        }
+        if(Input.getKeyPressNow("p")){
+            Music = SoundMaster.playSound("BM");
+        }
+        if(Input.getKeyPressNow("0")){
+            SoundMaster.stopSound(Music);
+        }
     }   
 }
