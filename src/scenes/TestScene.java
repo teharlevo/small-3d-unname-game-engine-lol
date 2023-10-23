@@ -124,7 +124,7 @@ public class TestScene extends Scene{
             tm.cangeText("lol");
         }
         else{
-            tm.cangeText("time" + Window.time());//lol
+            tm.cangeText("time" + Window.time());
         }
     }
 }
