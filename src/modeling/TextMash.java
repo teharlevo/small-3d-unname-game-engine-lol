@@ -1,14 +1,19 @@
 package modeling;
 
 import fontPancking.FontLoader;
+import main.Assets;
 
 public class TextMash {
     private Mash mash;
     private FontLoader font;
-    private float addedSpace = 0;
 
-    public TextMash(String text,float _addedSpace,FontLoader _font){
+    public TextMash(String text,FontLoader _font){
         font = _font;
+        mash = new Mash(makeVerties(text), font.getTexture());
+    }
+
+    public TextMash(String text,String fontName){
+        font = Assets.getFontLoader(fontName);
         mash = new Mash(makeVerties(text), font.getTexture());
     }
 

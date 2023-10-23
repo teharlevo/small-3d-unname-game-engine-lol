@@ -46,7 +46,7 @@ public class TestScene extends Scene{
         Entity entt = new Entity();
         entt.addComponent(new Model(fb.getTexturex(),0,0,-1,crt));
         entt = new Entity();
-        tm = new TextMash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",0.02f,new FontLoader("assets\\fonts\\arial.fnt"));
+        tm = new TextMash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",new FontLoader("assets\\fonts\\arial.fnt"));
         entt.addComponent(new Model(tm.getMash(),0,0,-20));
 
         fb.bind();
@@ -120,6 +120,11 @@ public class TestScene extends Scene{
         if(Input.getKeyPressNow("0")){
             SoundMaster.stopSound(Music);
         }
-        tm.cangeText("time" + Window.time());
+        if(Input.getKeyPress("u")){
+            tm.cangeText("lol");
+        }
+        else{
+            tm.cangeText("time" + Window.time());
+        }
     }
 }
