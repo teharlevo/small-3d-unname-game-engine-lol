@@ -8,6 +8,7 @@ public class Mash {
 
     private float[] vertices;
     private Texture textuere;
+    private boolean dartyFlag;
 
     public Mash(float[] mashVertices,Texture tex){
         vertices = mashVertices; 
@@ -46,11 +47,22 @@ public class Mash {
         -width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,}; 
     }
    
+    public void setVertices(float[] newVertices){
+        vertices = newVertices;
+        dartyFlag = true;
+    }
+
     public float[] getVertices(){
         return vertices;
     }
 
     public Texture getTexture(){
         return textuere;
+    }
+
+    public boolean needBufferVertex(){
+        boolean df = dartyFlag;
+        dartyFlag = false;
+        return df;
     }
 }

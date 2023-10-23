@@ -1,4 +1,3 @@
-
 import java.util.Random;
 
 import main.Entity;
@@ -11,6 +10,7 @@ import main.Input;
 import main.Scene;
 import main.Window;
 import modeling.Model;
+import modeling.TextMash;
 import render.FrameBuffer;
 import render.Renderer;
 
@@ -23,7 +23,7 @@ public class TestScene extends Scene{
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
         Window.scenes[0] = new TestScene();
-        new Window(600,600,"test");
+        new Window(900,600,"test");
     }
     
     public void init() {
@@ -44,11 +44,15 @@ public class TestScene extends Scene{
         crt = new Renderer("outline", cam);
         Entity entt = new Entity();
         entt.addComponent(new Model(fb.getTexturex(),0,0,-1,crt));
+        entt = new Entity();
+        tm = new TextMash("hi");
+        entt.addComponent(new Model(tm.getMash(),0,0,-20));
 
         fb.bind();
         g.render();
         fb.unbind();
     }
+    TextMash tm;
     int Music = 0;
     public void update(float dt) {
         fb.bind();
@@ -115,5 +119,8 @@ public class TestScene extends Scene{
         if(Input.getKeyPressNow("0")){
             SoundMaster.stopSound(Music);
         }
-    }   
+        if(Input.getKeyPressNow("u")){
+            tm.cangeText("LOL");
+        }
+    }
 }
