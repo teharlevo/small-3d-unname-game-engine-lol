@@ -81,7 +81,6 @@ public class RenderBatch {
         float[] vertexArray = model.getMash().getVertices();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertexArray);
-        System.out.println("lol");
     }
     
     public void update(Camrea c) {

@@ -13,6 +13,7 @@ import render.Texture;
 public class FontLoader {
 
     private Map<Character,CharInfo> charToInfo = new HashMap<>();
+    private float lineHight;
     private Texture tex;
     
     public FontLoader(String path){
@@ -27,7 +28,9 @@ public class FontLoader {
         texName = texName.substring(0, texName.indexOf("."));
         tex = Assets.getTexture(texName);
         String[] lines = text.split("\n");
-        System.out.println(lines.length);
+        lineHight = (float)Integer.parseInt(lines[1].split("lineHeight=")[1].split(" ")[0])
+        /(float)tex.height();
+
         for (int i = 5; i < lines.length; i++) {
             String[] parmet = lines[i].split("=");
             char c =(char)Integer.parseInt(parmet[1].split(" ")[0]);
@@ -35,13 +38,18 @@ public class FontLoader {
             int y = Integer.parseInt(parmet[3].split(" ")[0]);
             int w = Integer.parseInt(parmet[4].split(" ")[0]);
             int h = Integer.parseInt(parmet[5].split(" ")[0]);
-            charToInfo.put(c,new CharInfo(c, x/tex.width(), y/tex.height(), w/tex.width(), h/tex.height()));
+            charToInfo.put(c,new CharInfo(c, (float)x/(float)tex.width()
+            ,1 - (float)y/(float)tex.height() - (float)h/(float)tex.height(), (float)w/(float)tex.width(), (float)h/(float)tex.height()));
         }
     }
 
     public float[] charCoreds(char c){
         CharInfo ci = charToInfo.get(c);
         return new float[]{ci.x(),ci.y(),ci.width(),ci.height()};
+    }
+
+    public float getLineHight(){
+        return lineHight;
     }
     
     public Texture getTexture(){
