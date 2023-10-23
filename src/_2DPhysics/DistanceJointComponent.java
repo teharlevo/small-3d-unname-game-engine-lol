@@ -1,5 +1,6 @@
 package _2DPhysics;
 
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.DistanceJoint;
 import org.jbox2d.dynamics.joints.DistanceJointDef;
@@ -14,6 +15,7 @@ public class DistanceJointComponent extends Component{
     private float length;
     private float frequencyHz;
     private float dampingRatio;
+    private float localAnchorAX,localAnchorAY,localAnchorBX,localAnchorBY = 0;
 
     public DistanceJointComponent(Body _bodyB,float _length,float _frequencyHz,float _dampingRatio){
         setJoint(_bodyB,_length,_frequencyHz,_dampingRatio);
@@ -35,7 +37,9 @@ public class DistanceJointComponent extends Component{
 
         djd.bodyA = object().getComponent(RigidBody.class).getBody();
         djd.bodyB = bodyB;
-
+        djd.localAnchorA.set(localAnchorAX, localAnchorAY);
+        djd.localAnchorB.set(localAnchorBX, localAnchorBY);
+        
         djd.length = length;
 
         djd.frequencyHz = frequencyHz;
@@ -46,6 +50,16 @@ public class DistanceJointComponent extends Component{
     
     public void update(float dt) {
         
+    }
+
+    public void setLocalAnchorA(float x,float y){
+        localAnchorAX = x;
+        localAnchorAY = y;
+    }
+
+    public void setLocalAnchorB(float x,float y){
+        localAnchorBX = x;
+        localAnchorBY = y;
     }
     
 }

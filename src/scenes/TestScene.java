@@ -1,130 +1,86 @@
-import java.util.Random;
+
 
 import main.Entity;
-import org.joml.Vector3f;
 
-import Sound.Sound;
-import Sound.SoundMaster;
+import org.jbox2d.dynamics.BodyType;
+
+import _2DPhysics.BoxCollider;
+import _2DPhysics.DistanceJointComponent;
 import _2DPhysics.Physics2D;
-import fontPancking.FontLoader;
+import _2DPhysics.RevoluteJointComponent;
+import _2DPhysics.RigidBody;
+
 import main.Input;
 import main.Scene;
 import main.Window;
+import modeling.Mash;
 import modeling.Model;
-import modeling.TextMash;
-import render.FrameBuffer;
-import render.Renderer;
 
 public class TestScene extends Scene{
-
-    FrameBuffer fb;
-    Renderer crt,g;
+    RigidBody bady,rightBox,LeftBox;
     
     public static void main(String[] args){
         Window.scenes = new Scene[1];
-        Physics2D.setGrvity(0, 10);
+        Physics2D.setGrvity(0, 0);
         Window.scenes[0] = new TestScene();
         new Window(900,600,"test");
     }
     
     public void init() {
-        fb = new FrameBuffer(Window.width(), Window.height());
-        g = new Renderer("default", cam);
-        Random r = new Random();
-        float dis = 5;
-        String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
-        for (int i = 0; i < 100; i++) {
-            Entity entt = new Entity();
-            entt.pos = new Vector3f(
-                r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
-            entt.angleX = r.nextFloat(-180, 180);
-            entt.angleY = r.nextFloat(-180, 180);
-            entt.angleZ = r.nextFloat(-180, 180);
-            entt.addComponent(new Model(modelName[r.nextInt(modelName.length)],0,0,0,g));
-        }
-        crt = new Renderer("outline", cam);
-        Entity entt = new Entity();
-        entt.addComponent(new Model(fb.getTexturex(),0,0,-1,crt));
-        entt = new Entity();
-        tm = new TextMash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",new FontLoader("assets\\fonts\\arial.fnt"));
-        entt.addComponent(new Model(tm.getMash(),0,0,-20));
+        Entity g = new Entity();
+        g.addComponent(new Model("bob", 0, 0, -15));
+        g.addComponent(new BoxCollider(1.5f *2, 2f*2));
+        g.addComponent(bady = new RigidBody(0,0,0,BodyType.DYNAMIC));
+        Entity r = new Entity();
+        r.addComponent(new BoxCollider(0.25f*2, 2f*2));
+        r.addComponent(LeftBox = new RigidBody(1.625f,0,0,BodyType.DYNAMIC));
+        r.addComponent(new Model(new Mash("4"), 1.625f, 0, -15));
+        Entity j = new Entity();
+        j.addComponent(new BoxCollider(0.25f*2, 2f*2));
+        j.addComponent(rightBox = new RigidBody(-1.625f,0,0,BodyType.DYNAMIC));
+        j.addComponent(new Model(new Mash("4"), -1.625f, 0, -15));
+        DistanceJointComponent k = new DistanceJointComponent(bady.getBody(),1.625f);
+        k.setLocalAnchorA(0, 1);
+        k.setLocalAnchorB(0, 1);
+        DistanceJointComponent k2 = new DistanceJointComponent(bady.getBody(),1.625f);
+        k2.setLocalAnchorA(0, -1);
+        k2.setLocalAnchorB(0, -1);
 
-        fb.bind();
-        g.render();
-        fb.unbind();
+        j.addComponent(k);
+        j.addComponent(k2);
+        g.addComponent(new RevoluteJointComponent(LeftBox.getBody()));
+        g.addComponent(new RevoluteJointComponent(rightBox.getBody()));
+
+        DistanceJointComponent w = new DistanceJointComponent(bady.getBody(),1.625f);
+        w.setLocalAnchorA(0, 1);
+        w.setLocalAnchorB(0, 1);
+        DistanceJointComponent w2 = new DistanceJointComponent(bady.getBody(),1.625f);
+        w2.setLocalAnchorA(0, -1);
+        w2.setLocalAnchorB(0, -1);
+        r.addComponent(w);
+        r.addComponent(w2);
     }
-    TextMash tm;
-    int Music = 0;
     public void update(float dt) {
-        fb.bind();
-        g.render();
-        crt.render();
-        fb.unbind();
-        g.render();
-        crt.render();
         float x = 0;
         float y = 0;
         
-        if(Input.getKeyPress("w")){
+        if(Input.getKeyPress("a")){
             x += 5.0f;
         }
         if(Input.getKeyPress("s")){
             x -= 5.0f;
         }
-        if(Input.getKeyPress("a")){
+        if(Input.getKeyPress("d")){
             y += 5.0f;
         }
-        if(Input.getKeyPress("d")){
+        if(Input.getKeyPress("f")){
             y -= 5.0f;
         }
-        cam.getPos().add(cam.getLookDir().mul(x * dt,new Vector3f()));
-        cam.setAngle(cam.getAngleX(), cam.getAngleY() + 90, cam.getAngleZ());
-        cam.getPos().add(cam.getLookDir().mul(y * dt,new Vector3f()));
-        cam.setAngle(cam.getAngleX(), cam.getAngleY() - 90, cam.getAngleZ());
-        
-
-        float angleX = 0;
-        float angleY = 0;
-        float angleZ = 0;
-
-        if(Input.getKeyPress("q")){
-            angleX += 90.0f;
-        }
-        if(Input.getKeyPress("e")){
-            angleX -= 90.0f;
-        }
-        if(Input.getKeyPress("c")){
-            angleY -= 90.0f;
-        }
-        if(Input.getKeyPress("v")){
-            angleY += 90.0f;
-        }
-        if(Input.getKeyPress("k")){
-            angleZ += 90.0f;
-        }
-        if(Input.getKeyPress("j")){
-            angleZ -= 90.0f;
-        }
-
-        cam.setAngle(cam.getAngleX() + angleX * dt, cam.getAngleY() + angleY * dt,cam.getAngleZ() + angleZ * dt);
-
-        if(Input.getKeyPressNow("i")){
-            SoundMaster.playSound("2");
-        }
-        if(Input.getKeyPressNow("o")){
-            SoundMaster.playSound("apple");
-        }
-        if(Input.getKeyPressNow("p")){
-            Music = SoundMaster.playSound("BM");
-        }
-        if(Input.getKeyPressNow("0")){
-            SoundMaster.stopSound(Music);
-        }
-        if(Input.getKeyPress("u")){
-            tm.cangeText("lol");
-        }
-        else{
-            tm.cangeText("time" + Window.time());
-        }
+        float sin = (float)Math.sin(Math.toRadians((double)rightBox.getAngle()));
+        float cos = (float)Math.cos(Math.toRadians((double)rightBox.getAngle()));
+        rightBox.addForce(-1000 * sin * x, -1000 * cos * x);
+        sin = (float)Math.sin(Math.toRadians((double)LeftBox.getAngle()));
+        cos = (float)Math.cos(Math.toRadians((double)LeftBox.getAngle()));
+        LeftBox.addForce( -1000 * sin  * y, -1000 * cos * y);
     }
 }
