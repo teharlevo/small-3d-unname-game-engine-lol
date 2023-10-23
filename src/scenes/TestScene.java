@@ -6,6 +6,7 @@ import org.joml.Vector3f;
 import Sound.Sound;
 import Sound.SoundMaster;
 import _2DPhysics.Physics2D;
+import fontPancking.FontLoader;
 import main.Input;
 import main.Scene;
 import main.Window;
@@ -45,7 +46,7 @@ public class TestScene extends Scene{
         Entity entt = new Entity();
         entt.addComponent(new Model(fb.getTexturex(),0,0,-1,crt));
         entt = new Entity();
-        tm = new TextMash("hi");
+        tm = new TextMash("hi",new FontLoader("assets\\fonts\\arial.fnt"));
         entt.addComponent(new Model(tm.getMash(),0,0,-20));
 
         fb.bind();

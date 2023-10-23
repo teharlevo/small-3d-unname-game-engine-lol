@@ -1,10 +1,14 @@
 package modeling;
 
+import fontPancking.FontLoader;
+
 public class TextMash {
     private Mash mash;
+    private FontLoader font;
 
-    public TextMash(String text){
-        mash = new Mash(makeVerties(text), "4");
+    public TextMash(String text,FontLoader _font){
+        font = _font;
+        mash = new Mash(makeVerties(text), font.getTexture());
     }
 
     public void cangeText(String text){
