@@ -111,6 +111,13 @@ public class TestScene extends Scene{
 
         cam.setAngle(cam.getAngleX() + angleX * dt, cam.getAngleY() + angleY * dt,cam.getAngleZ() + angleZ * dt);
 
+        if(Input.getKeyPress("r")){
+            cam.setPerspective(cam.getFoV() + dt * 10);
+        }
+        if(Input.getKeyPress("t")){
+            cam.setPerspective(cam.getFoV() - dt * 10);
+        }
+
         if(Input.getKeyPressNow("i")){
             SoundMaster.playSound("2");
         }
