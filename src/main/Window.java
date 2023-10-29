@@ -9,6 +9,7 @@ import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
 
+import Sound.SoundMaster;
 import _2DPhysics.Physics2D;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -157,6 +158,7 @@ public class Window {
         }
         
         Physics2D.update(dt);
+        SoundMaster.update();
 
         currentScene.update(dt);
         currentScene.renderer.render();

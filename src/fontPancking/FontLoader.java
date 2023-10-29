@@ -38,14 +38,22 @@ public class FontLoader {
             int y = Integer.parseInt(parmet[3].split(" ")[0]);
             int w = Integer.parseInt(parmet[4].split(" ")[0]);
             int h = Integer.parseInt(parmet[5].split(" ")[0]);
+            int Xoffset = Integer.parseInt(parmet[6].split(" ")[0]);
+            int Yoffset = Integer.parseInt(parmet[7].split(" ")[0]);
+            int Xadvance = Integer.parseInt(parmet[8].split(" ")[0]);
+            
             charToInfo.put(c,new CharInfo(c, (float)x/(float)tex.width()
-            ,1 - (float)y/(float)tex.height() - (float)h/(float)tex.height(), (float)w/(float)tex.width(), (float)h/(float)tex.height()));
+            ,1 - (float)y/(float)tex.height() - (float)h/(float)tex.height()
+            , (float)w/(float)tex.width(), (float)h/(float)tex.height()
+            ,(float)Xoffset/(float)tex.width(),
+            -(float)Yoffset/(float)tex.height() + (float)(lineHight/2)/(float)tex.height(),
+            (float)Xadvance/(float)tex.width()));
         }
     }
 
     public float[] charCoreds(char c){
         CharInfo ci = charToInfo.get(c);
-        return new float[]{ci.x(),ci.y(),ci.width(),ci.height()};
+        return new float[]{ci.x(),ci.y(),ci.width(),ci.height(),ci.Xoffset(),ci.Yoffset(),ci.Xadvance()};
     }
 
     public float getLineHight(){

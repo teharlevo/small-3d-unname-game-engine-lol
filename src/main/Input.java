@@ -1,7 +1,9 @@
 package main;
 import static org.lwjgl.glfw.GLFW.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Input  {
@@ -18,6 +20,8 @@ public class Input  {
     private static float posX,posY;
     private static boolean keyPressed[] = new boolean[350];
     private static boolean keyPressedNow[] = new boolean[350];
+    private static List<String> keyPrassList = new ArrayList<>();
+    private static List<String> keyPrassNowList = new ArrayList<>();
     private static Map<String, Integer> keyByName = new HashMap<>();
     private static Map<Integer, String> keyByNum = new HashMap<>();
     private static boolean mouseButtonPressed[] = new boolean[3];
@@ -38,6 +42,8 @@ public class Input  {
     }
 
     public static void update(long window){
+        keyPrassNowList = new ArrayList<>();
+
         keyPressedNow = new boolean[350];
         mouseButtonPressedNow = new boolean[3];
         glfwSetCursorPosCallback(window, Input::mousePosCallback);
@@ -51,9 +57,12 @@ public class Input  {
             keyPressed[key] = true;
             keyPressedNow[key] = true;
             lastKeyToPress = key;
+            keyPrassNowList.add(keyByNum.get(key));
+            keyPrassList.add(keyByNum.get(key));
         } 
         else if (action == GLFW_RELEASE) {
             keyPressed[key] = false;
+            keyPrassList.remove(keyByNum.get(key));
         }
     }
 
@@ -90,9 +99,19 @@ public class Input  {
 
     public static boolean getKeyPressNow(String keyName){
         int key = keyByName.get(keyName);
-        boolean g = keyPressedNow[key];
-        keyPressedNow[key] = false;
-        return g;
+        return keyPressedNow[key];
+    }
+
+    public static String[] getKeysPress(){
+        String keyPrassArray[] = new String[keyPrassList.size()];
+        keyPrassArray = keyPrassList.toArray(keyPrassArray);
+        return keyPrassArray;
+    }
+
+    public static String[] getKeysPressNow(){
+        String keyPrassNowArray[] = new String[keyPrassNowList.size()];
+        keyPrassNowArray = keyPrassNowList.toArray(keyPrassNowArray);
+        return keyPrassNowArray;
     }
 
     public static int getLastKeyToPress(){

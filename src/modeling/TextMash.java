@@ -6,18 +6,22 @@ import main.Assets;
 public class TextMash {
     private Mash mash;
     private FontLoader font;
+    private String text;
 
-    public TextMash(String text,FontLoader _font){
+    public TextMash(String _text,FontLoader _font){
+        text = _text;
         font = _font;
         mash = new Mash(makeVerties(text), font.getTexture());
     }
 
-    public TextMash(String text,String fontName){
+    public TextMash(String _text,String fontName){
+        text = _text;
         font = Assets.getFontLoader(fontName);
         mash = new Mash(makeVerties(text), font.getTexture());
     }
 
-    public void cangeText(String text){
+    public void cangeText(String _text){
+        text = _text;
         mash.setVertices(makeVerties(text));
     }
 
@@ -32,8 +36,10 @@ public class TextMash {
                 float[] charCords = font.charCoreds(text.charAt(i));
                 for (int j = 0; j < 6; j++) {
                 int offset = i * 60 + j * 10;
+                float Yoffset = charCords[5];
+                if(text.charAt(i) == 'w'){Yoffset = 0;}
                 verties[offset    ] = poscords[j*2] * charCords[2] + addx;
-                verties[offset + 1] = poscords[j*2 + 1] * charCords[3] + addy;
+                verties[offset + 1] = poscords[j*2 + 1] * charCords[3] + addy + Yoffset;
                 verties[offset + 2] =  0;
                 verties[offset + 3] =  1.0f;
                 verties[offset + 4] =  1.0f;
@@ -43,7 +49,7 @@ public class TextMash {
                 verties[offset + 8] = charCords[1] +  uvcords[j*2 + 1] * charCords[3];
                 verties[offset + 9] = 0;
                 }
-                addx += charCords[2];
+                addx += charCords[6];
             }
             else{
                 addy -= font.getLineHight();
@@ -55,5 +61,9 @@ public class TextMash {
 
     public Mash getMash(){
         return mash;
+    }
+
+    public String getText(){
+        return text;
     }
 }
