@@ -46,7 +46,7 @@ public class FontLoader {
             ,1 - (float)y/(float)tex.height() - (float)h/(float)tex.height()
             , (float)w/(float)tex.width(), (float)h/(float)tex.height()
             ,(float)Xoffset/(float)tex.width(),
-            -(float)Yoffset/(float)tex.height() + (float)(lineHight/2)/(float)tex.height(),
+            (float)(h)/(float)tex.height() - (float)Yoffset/(float)tex.height(),
             (float)Xadvance/(float)tex.width()));
         }
     }
