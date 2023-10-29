@@ -1,3 +1,4 @@
+package scenes;
 import java.util.Random;
 
 import main.Entity;

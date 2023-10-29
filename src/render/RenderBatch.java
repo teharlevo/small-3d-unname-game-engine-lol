@@ -108,7 +108,7 @@ public class RenderBatch {
         glEnableVertexAttribArray(1);
 
         //glDrawElements(GL_TRIANGLES, m.getMash().getVertices().length/10, GL_UNSIGNED_INT, 0);
-        glDrawArrays(GL_TRIANGLES,0,model.getMash().getVertices().length/10);
+        glDrawArrays(GL_LINES,0,model.getMash().getVertices().length/10);
 
         // Unbind everything
         glDisableVertexAttribArray(0);
