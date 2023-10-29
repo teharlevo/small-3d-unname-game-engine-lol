@@ -11,6 +11,7 @@ import main.Input;
 import main.Scene;
 import main.Window;
 import modeling.Model;
+import modeling.ModelShape;
 import modeling.TextMash;
 import render.FrameBuffer;
 import render.Renderer;
@@ -26,7 +27,7 @@ public class TestScene extends Scene{
         Window.scenes[0] = new TestScene();
         new Window(900,600,"test");
     }
-    
+    Model k[] = new Model[100];
     public void init() {
         fb = new FrameBuffer(Window.width(), Window.height());
         g = new Renderer("default", cam);
@@ -40,7 +41,7 @@ public class TestScene extends Scene{
             entt.angleX = r.nextFloat(-180, 180);
             entt.angleY = r.nextFloat(-180, 180);
             entt.angleZ = r.nextFloat(-180, 180);
-            entt.addComponent(new Model(modelName[r.nextInt(modelName.length)],0,0,0,g));
+            entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0,g));
         }
         crt = new Renderer("outline", cam);
         Entity entt = new Entity();
@@ -55,7 +56,8 @@ public class TestScene extends Scene{
     }
     TextMash tm;
     int Music = 0;
-    String text = "lolopopo";
+    String text = "";
+    boolean lines = false;
     public void update(float dt) {
         fb.bind();
         g.render();
@@ -131,6 +133,19 @@ public class TestScene extends Scene{
         }
         if(Input.getKeysPressNow().length > 0){
             text += Input.getKeysPressNow()[0];
+        }
+
+        if(Input.getKeyPress("p")){
+            lines = true;
+            for (int i = 0; i < k.length; i++) {
+                k[i].setModelShape(ModelShape.Lines);
+            }
+        }
+        else if(lines == true){
+            lines = false;
+            for (int i = 0; i < k.length; i++) {
+                k[i].setModelShape(ModelShape.triangles);
+            }
         }
     }
 }
