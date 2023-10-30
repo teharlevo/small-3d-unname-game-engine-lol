@@ -131,7 +131,7 @@ public class RenderBatch {
     }
 
     private void g(Texture[] tex,float[] floats,String[] floatsNames,
-        int[] ints,String[] intsNames){
+        int[] ints,String[] intsNames){//פשוט תפסיק להתעצל
 
         int texsLength = tex.length;
         if(texsLength > 7){

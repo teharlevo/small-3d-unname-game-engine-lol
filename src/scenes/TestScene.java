@@ -47,7 +47,7 @@ public class TestScene extends Scene{
         Entity entt = new Entity();
         entt.addComponent(new Model(fb.getTexturex(),0,0,-1,crt));
         entt = new Entity();
-        tm = new TextMash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",new FontLoader("assets\\fonts\\arial.fnt"));
+        tm = new TextMash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz","arial");
         entt.addComponent(new Model(tm.getMash(),0,0,-20));
 
         fb.bind();
@@ -116,6 +116,10 @@ public class TestScene extends Scene{
         }
         if(Input.getKeyPress("t")){
             cam.setPerspective(cam.getFoV() - dt * 10);
+        }
+
+        if(Input.getKeyPressNow("y")){
+            cam.setOrtho(10f);
         }
 
         if(Input.getKeyPressNow("i")){

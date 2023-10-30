@@ -17,6 +17,9 @@ public class Camrea {
     private float zFar = 1000.0f;
     private float aspect = Window.width()/Window.height();
 
+    private float orthoSize;
+    private boolean isOrtho = false;
+
     private float angleX = 0;
     private float angleY = 0;
     private float angleZ = 0;
@@ -107,11 +110,33 @@ public class Camrea {
         zFar = _zFar;
         pm.identity();
         pm.perspective((float)Math.toRadians(FoV),aspect,zNear,zFar,pm);
+        isOrtho = false;
     }
 
     public void setPerspective(float _FoV){
         FoV = _FoV;
         setPerspective(FoV,aspect,zNear,zFar);
+    }
+
+    public void setPerspective(){
+        setPerspective(FoV,aspect,zNear,zFar);
+    }
+
+    public boolean getIsOrtho(){
+        return isOrtho;
+    }
+
+    public float getOrthoSize(){
+        return orthoSize;
+    }
+
+    public void setOrtho(float _orthoSize){
+        isOrtho = true;
+        pm.identity();
+        orthoSize = _orthoSize;
+        float asp = (orthoSize * ((float)Window.height()/(float)Window.width()))/2;
+        pm.ortho(-orthoSize/2,orthoSize/2,-asp
+        ,asp,zNear, zFar, pm);
     }
 
     public Matrix4f getProjectionMarix(){
