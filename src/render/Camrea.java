@@ -15,7 +15,7 @@ public class Camrea {
     private Matrix4f pm = new Matrix4f().identity();
     private float zNear = 0.01f;
     private float zFar = 1000.0f;
-    private float aspect = Window.width()/Window.height();
+    private float aspect = (float)Window.width()/(float)Window.height();
 
     private float orthoSize;
     private boolean isOrtho = false;

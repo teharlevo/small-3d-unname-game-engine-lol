@@ -25,7 +25,7 @@ public class TestScene extends Scene{
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
         Window.scenes[0] = new TestScene();
-        new Window(900,600,"test");
+        new Window(900,901,"test");
     }
     Model k[] = new Model[100];
     public void init() {
@@ -49,7 +49,7 @@ public class TestScene extends Scene{
         entt = new Entity();
         tm = new TextMash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz","arial");
         entt.addComponent(new Model(tm.getMash(),0,0,-20));
-
+        
         fb.bind();
         g.render();
         fb.unbind();
@@ -85,7 +85,6 @@ public class TestScene extends Scene{
         cam.getPos().add(cam.getLookDir().mul(y * dt,new Vector3f()));
         cam.setAngle(cam.getAngleX(), cam.getAngleY() - 90, cam.getAngleZ());
         
-
         float angleX = 0;
         float angleY = 0;
         float angleZ = 0;

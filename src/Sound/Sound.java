@@ -72,7 +72,6 @@ public class Sound {
         if (state == AL_STOPPED) {
             isPlaying = false;
             alSourcei(sourceID, AL_POSITION, 0);
-            System.out.println(Pos());
         }
         
         if (!isPlaying) {
