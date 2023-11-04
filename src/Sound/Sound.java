@@ -116,5 +116,5 @@ public class Sound {
     public int Pos(){
         return alGetSourcei(sourceID, AL_POSITION);
     }
-
+    
 }

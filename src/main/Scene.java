@@ -5,12 +5,21 @@ import render.Renderer;
 
 public abstract class Scene{
 
-    public Renderer renderer;
+    private Renderer renderer,UI;
     public  Camrea cam;
     
     public Scene(){
         cam = new Camrea(0, 0, 0);
         renderer = new Renderer("default",cam);
+        UI = new Renderer("UI",new Camrea(0, 0, 1));
+    }
+
+    public Renderer getRenderer(){
+        return renderer;
+    }
+
+    public Renderer getUIRenderer(){
+        return UI;
     }
 
     public abstract void init();

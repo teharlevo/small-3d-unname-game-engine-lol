@@ -29,11 +29,19 @@ public class Model extends Component{
     } 
 
     public Model(String mashName,float x,float y,float z){
-        createFanc(Assets.getModelMesh(mashName),x,y,z,Window.getCurrentScene().renderer);
+        createFanc(Assets.getModelMesh(mashName),x,y,z,Window.getCurrentScene().getRenderer());
     } 
 
     public Model(Mash _mash,float x,float y,float z){
-        createFanc(_mash,x,y,z,Window.getCurrentScene().renderer);
+        createFanc(_mash,x,y,z,Window.getCurrentScene().getRenderer());
+    } 
+
+    public Model(String mashName,float x,float y){
+        createFanc(Assets.getModelMesh(mashName),x,y,0,Window.getCurrentScene().getRenderer());
+    } 
+
+    public Model(Mash _mash,float x,float y){
+        createFanc(_mash,x,y,0,Window.getCurrentScene().getUIRenderer());
     } 
 
     public Model(Mash _mash,float x,float y,float z,Renderer renderer){
@@ -41,7 +49,7 @@ public class Model extends Component{
     } 
 
     public Model(Texture tex,float x,float y,float z){
-        createFanc(new Mash(tex),x,y,z,Window.getCurrentScene().renderer);
+        createFanc(new Mash(tex),x,y,z,Window.getCurrentScene().getRenderer());
     } 
 
     public Model(Texture tex,float x,float y,float z,Renderer renderer){

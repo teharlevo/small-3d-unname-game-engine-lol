@@ -58,7 +58,7 @@ public class Texture {
         texID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texID);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height,
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height,
                 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_R,GL_REPEAT);

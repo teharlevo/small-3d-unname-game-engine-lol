@@ -160,8 +160,10 @@ public class Window {
         Physics2D.update(dt);
         SoundMaster.update();
 
+        currentScene.getRenderer().render();
+        currentScene.getUIRenderer().render();
+
         currentScene.update(dt);
-        currentScene.renderer.render();
         Input.update(window);
     }
 

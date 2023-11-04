@@ -10,27 +10,27 @@ import fontPancking.FontLoader;
 import main.Input;
 import main.Scene;
 import main.Window;
+import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
 import modeling.TextMash;
+import render.Camrea;
 import render.FrameBuffer;
 import render.Renderer;
 
+import static org.lwjgl.opengl.GL11.*;
+
 public class TestScene extends Scene{
 
-    FrameBuffer fb;
-    Renderer crt,g;
     
     public static void main(String[] args){
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
         Window.scenes[0] = new TestScene();
-        new Window(900,901,"test");
+        new Window(900,600,"test");
     }
     Model k[] = new Model[100];
     public void init() {
-        fb = new FrameBuffer(Window.width(), Window.height());
-        g = new Renderer("default", cam);
         Random r = new Random();
         float dis = 5;
         String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
@@ -41,30 +41,19 @@ public class TestScene extends Scene{
             entt.angleX = r.nextFloat(-180, 180);
             entt.angleY = r.nextFloat(-180, 180);
             entt.angleZ = r.nextFloat(-180, 180);
-            entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0,g));
+            entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
         }
-        crt = new Renderer("outline", cam);
         Entity entt = new Entity();
-        entt.addComponent(new Model(fb.getTexturex(),0,0,-1,crt));
         entt = new Entity();
         tm = new TextMash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz","arial");
-        entt.addComponent(new Model(tm.getMash(),0,0,-20));
+        entt.addComponent(new Model(tm.getMash(),0,0));
         
-        fb.bind();
-        g.render();
-        fb.unbind();
     }
     TextMash tm;
     int Music = 0;
     String text = "";
     boolean lines = false;
     public void update(float dt) {
-        fb.bind();
-        g.render();
-        crt.render();
-        fb.unbind();
-        g.render();
-        crt.render();
         float x = 0;
         float y = 0;
         

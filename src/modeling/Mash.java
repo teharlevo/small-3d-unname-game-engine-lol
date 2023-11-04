@@ -21,8 +21,8 @@ public class Mash {
     }
 
     public Mash(Texture tex){
-        float width =  tex.width() /(float)Window.width() ;
-        float height = tex.height()/ (float)Window.height();
+        float width =  (float)tex.width() /(float)Window.height();
+        float height = (float)tex.height()/(float)Window.height();
         vertices =new float[]{
         -width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,
          width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 0.0f,0.0f,
@@ -35,8 +35,8 @@ public class Mash {
 
     public Mash(String str){
         textuere = Assets.getTexture(str);
-        float width =  textuere.width() /(float)Window.width()  ;
-        float height = textuere.height()/ (float)Window.height();
+        float width =  (float)textuere.width() /(float)Window.height();
+        float height = (float)textuere.height()/(float)Window.height();
         vertices =new float[]{
         -width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  0.0f, 0.0f,0.0f,
          width, -height,  0.0f, 1.0f,1.0f,1.0f,1.0f,  1.0f, 0.0f,0.0f,
