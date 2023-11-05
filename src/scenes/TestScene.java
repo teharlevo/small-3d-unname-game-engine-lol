@@ -1,6 +1,7 @@
 package scenes;
 import java.util.Random;
 
+import main.Assets;
 import main.Entity;
 import org.joml.Vector3f;
 
@@ -12,7 +13,7 @@ import main.Window;
 import modeling.Model;
 import modeling.ModelShape;
 import modeling.TextMash;
-import render.SkyBox;
+import render.SkyBox.SkyBox;
 
 public class TestScene extends Scene{
 
@@ -106,6 +107,17 @@ public class TestScene extends Scene{
         }
         if(Input.getKeyPress("t")){
             cam.setPerspective(cam.getFoV() - dt * 10);
+        }
+
+        if(Input.getKeyPress("l")){
+            if(Window.getCurrentScene().getRenderer().getShader() !=
+            Assets.getShader("fog")){
+                Window.getCurrentScene().getRenderer().setShader(Assets.getShader("fog"));
+            }
+        }
+        else if(Window.getCurrentScene().getRenderer().getShader() !=
+        Assets.getShader("default")){
+                Window.getCurrentScene().getRenderer().setShader(Assets.getShader("default"));
         }
 
         if(Input.getKeyPressNow("y")){

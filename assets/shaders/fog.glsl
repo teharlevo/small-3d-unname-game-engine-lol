@@ -33,14 +33,17 @@ in float fTexId;
 
 out vec4 color;
 
-void main()
+float near = 0.1; 
+float far  = 10.0; 
+  
+float LinearizeDepth(float depth) 
 {
-    if(fTexId == -1){
-        color = fColor;
-    }else{
-        int id = int(fTexId);
-        color = fColor * texture(uTex_Sampler[id], fTexCoords);
-    }
+    float z = depth * 2.0 - 1.0; // back to NDC 
+    return (2.0 * near * far) / (far + near - z * (far - near));	
 }
 
-out vec4 FragColor;
+void main()
+{             
+    float depth = LinearizeDepth(gl_FragCoord.z) / far; // divide by far for demonstration
+    color = vec4(vec3(1- depth), 1.0);
+}

@@ -1,4 +1,4 @@
-package render;
+package render.SkyBox;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -7,6 +7,8 @@ import main.Entity;
 import main.Window;
 import modeling.Mash;
 import modeling.Model;
+import render.Renderer;
+import render.Shader;
 
 public class SkyBox {
     

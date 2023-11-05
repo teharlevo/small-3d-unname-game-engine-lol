@@ -26,6 +26,8 @@ public class RenderBatch {
     private final int vertexSize = 10;
     private final int vertexSizeBytes = vertexSize * Float.BYTES;
 
+    private int texsUseCount = 0;
+
     public RenderBatch(Shader shader,Model _model){
         s = shader;
         model = _model;
@@ -85,7 +87,7 @@ public class RenderBatch {
     
     public void update(Camrea c) {
 
-        
+        texsUseCount = 0;
         // Bind shader program
         s.use();
 
@@ -119,7 +121,7 @@ public class RenderBatch {
 
     private void sandInfrmasihnToGPU(Camrea c,Model m){
         
-        if(model.getTexture() != null){model.getTexture().bind();}
+        if(model.getTexture() != null){model.getTexture().bind(); texsUseCount ++;}
         s.uploadMat4f("uView",c.getViewMatrix());
         s.uploadMat4f("uModel",m.getMatrix() );
         s.uploadMat4f("uProjection",
@@ -134,12 +136,13 @@ public class RenderBatch {
         int[] ints,String[] intsNames){//פשוט תפסיק להתעצל
 
         int texsLength = tex.length;
-        if(texsLength > 7){
-            texsLength = 7;
-        }
         for (int i = 0; i < tex.length; i++) {
-            glActiveTexture(GL_TEXTURE0 + 1 + i);
-            tex[i].bind();
+
+            if(texsUseCount < 8){
+                glActiveTexture(GL_TEXTURE0 + texsUseCount);
+                tex[i].bind();
+                texsUseCount ++;
+            }
         }
         
         if(floats != null){
@@ -153,5 +156,13 @@ public class RenderBatch {
                 s.uploadInt(intsNames[i], ints[i]);
             }
         }
+    }
+
+    public Shader getShader(){
+        return s;
+    }
+
+    public void setShader(Shader newShader){
+        s = newShader;
     }
 }

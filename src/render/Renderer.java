@@ -35,4 +35,15 @@ public class Renderer {
         render(c);
     }
 
+    public Shader getShader(){
+        return s;
+    }
+
+    public void setShader(Shader newShader){
+        s = newShader;
+        for (int i = 0; i < batchers.size(); i++) {
+            batchers.get(i).setShader(newShader);
+        }
+    }
+
 }
