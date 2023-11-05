@@ -36,9 +36,6 @@ public class Window {
 
     private static long window;
 
-    private long audioContext;
-    private long audioDevice;
-
     private static int width = 300;
     private static int height = 500; 
     private static String title;
@@ -91,10 +88,10 @@ public class Window {
         glfwShowWindow(window);
 
         String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
-        audioDevice = alcOpenDevice(defaultDeviceName);
+        long audioDevice = alcOpenDevice(defaultDeviceName);
 
         int[] attributes = {0};
-        audioContext = alcCreateContext(audioDevice, attributes);
+        long audioContext = alcCreateContext(audioDevice, attributes);
         alcMakeContextCurrent(audioContext);
 
         ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);

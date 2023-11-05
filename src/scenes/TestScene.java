@@ -22,7 +22,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class TestScene extends Scene{
 
-    
+    Model m;
     public static void main(String[] args){
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
@@ -45,8 +45,10 @@ public class TestScene extends Scene{
         }
         Entity entt = new Entity();
         entt = new Entity();
-        tm = new TextMash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz","arial");
-        entt.addComponent(new Model(tm.getMash(),0,0));
+        tm = new TextMash("","arial");
+        m = new Model("bob",0,0,2,getUIRenderer());
+        entt.addComponent(m);
+        
         
     }
     TextMash tm;
@@ -96,6 +98,7 @@ public class TestScene extends Scene{
         if(Input.getKeyPress("j")){
             angleZ -= 90.0f;
         }
+        m.setAngle(cam.getAngleX(),cam.getAngleY(),cam.getAngleZ());
 
         cam.setAngle(cam.getAngleX() + angleX * dt, cam.getAngleY() + angleY * dt,cam.getAngleZ() + angleZ * dt);
 
