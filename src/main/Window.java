@@ -158,7 +158,9 @@ public class Window {
         SoundMaster.update();
 
         currentScene.getRenderer().render();
+        glDepthMask(false);  
         currentScene.getUIRenderer().render();
+        glDepthMask(true);  
 
         currentScene.update(dt);
         Input.update(window);

@@ -14,7 +14,7 @@ public class SkyBox {
     private Renderer skyBoxRenderer;
 
     public SkyBox(){
-        skyBoxShader = Assets.getShader("default");
+        skyBoxShader = Assets.getShader("SkyBox");
         skyBoxRenderer = new Renderer(skyBoxShader, Window.getCurrentScene().cam);
 
         float[] cubeVertex = new float[]{
