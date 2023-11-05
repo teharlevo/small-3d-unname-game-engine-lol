@@ -6,29 +6,24 @@ import org.joml.Vector3f;
 
 import Sound.SoundMaster;
 import _2DPhysics.Physics2D;
-import fontPancking.FontLoader;
 import main.Input;
 import main.Scene;
 import main.Window;
-import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
 import modeling.TextMash;
-import render.Camrea;
-import render.FrameBuffer;
-import render.Renderer;
-
-import static org.lwjgl.opengl.GL11.*;
+import render.SkyBox;
 
 public class TestScene extends Scene{
 
-    Model m;
+    private SkyBox lol;
     public static void main(String[] args){
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
         Window.scenes[0] = new TestScene();
         new Window(900,600,"test");
     }
+
     Model k[] = new Model[100];
     public void init() {
         Random r = new Random();
@@ -43,19 +38,25 @@ public class TestScene extends Scene{
             entt.angleZ = r.nextFloat(-180, 180);
             entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
         }
+
+        lol = new SkyBox();
+        
         Entity entt = new Entity();
         entt = new Entity();
         tm = new TextMash("","arial");
-        m = new Model("bob",0,0,1,getUIRenderer());
-        entt.addComponent(m);
+        entt.addComponent(new Model(tm.getMash(), -10,10));
         
         
     }
+
     TextMash tm;
     int Music = 0;
     String text = "";
     boolean lines = false;
+
     public void update(float dt) {
+
+        lol.render();
         float x = 0;
         float y = 0;
         
@@ -98,8 +99,6 @@ public class TestScene extends Scene{
         if(Input.getKeyPress("j")){
             angleZ -= 90.0f;
         }
-        m.setAngle(cam.getAngleX(),cam.getAngleY(),cam.getAngleZ());
-
         cam.setAngle(cam.getAngleX() + angleX * dt, cam.getAngleY() + angleY * dt,cam.getAngleZ() + angleZ * dt);
 
         if(Input.getKeyPress("r")){

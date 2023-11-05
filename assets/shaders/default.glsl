@@ -40,6 +40,5 @@ void main()
     }else{
         int id = int(fTexId);
         color = fColor * texture(uTex_Sampler[id], fTexCoords);
-        //color = fColor;
     }
 }

@@ -17,10 +17,10 @@ public class CircleCollider extends Component{
     }
     
     public void start() {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
     }
     
     public void update(float dt) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
     }
 }
