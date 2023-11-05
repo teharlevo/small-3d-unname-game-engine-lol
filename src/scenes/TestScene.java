@@ -46,7 +46,7 @@ public class TestScene extends Scene{
         Entity entt = new Entity();
         entt = new Entity();
         tm = new TextMash("","arial");
-        m = new Model("bob",0,0,2,getUIRenderer());
+        m = new Model("bob",0,0,0,getUIRenderer());
         entt.addComponent(m);
         
         
