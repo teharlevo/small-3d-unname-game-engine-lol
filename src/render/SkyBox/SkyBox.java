@@ -79,10 +79,10 @@ public class SkyBox {
 
     public void render(){
         if(!Input.getKeyPress("j")){return;}
-        //glDepthMask(false); // change depth function so depth test passes when values are equal to depth buffer's content
+        glDepthMask(false); // change depth function so depth test passes when values are equal to depth buffer's content
 
         skyBoxRenderer.render();
-        //glDepthMask(true);
+        glDepthMask(true);
     }
 
 }
