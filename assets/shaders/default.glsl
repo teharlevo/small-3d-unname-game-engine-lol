@@ -30,7 +30,6 @@ in vec4 fColor;
 in vec2 fTexCoords;
 in float fTexId;
 
-
 out vec4 color;
 
 void main()
@@ -42,5 +41,3 @@ void main()
         color = fColor * texture(uTex_Sampler[id], fTexCoords);
     }
 }
-
-out vec4 FragColor;

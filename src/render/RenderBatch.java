@@ -96,8 +96,8 @@ public class RenderBatch {
         draw();
 
         glBindVertexArray(0);
-        if(model.getTexture() != null){model.getTexture().unbind();}
-        glBindTexture(GL_TEXTURE_2D, 0);
+        //if(model.getTexture() != null){model.getTexture().unbind();}
+        //glBindTexture(model.getTexture().getKindOfBind(), 0);
 
         s.detach();
     }

@@ -1,5 +1,24 @@
 package render;
 
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_REPEAT;
+import static org.lwjgl.opengl.GL11.GL_RGB;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
+import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
+import static org.lwjgl.opengl.GL12.GL_TEXTURE_WRAP_R;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X;
 import static org.lwjgl.opengl.GL20.*;
 
 import java.nio.ByteBuffer;
@@ -13,11 +32,13 @@ public class Texture {
     private int width = 0;
     private int height = 0;
 
+    private int kindOfBind = 0;
 
     public Texture(String path){
 
         texID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texID);
+        kindOfBind = GL_TEXTURE_2D;
 
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_R,GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
@@ -54,6 +75,47 @@ public class Texture {
         unbind();
     }
 
+        public Texture(String[] facesNameFile){//cube map
+        texID = glGenTextures();
+        glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
+        kindOfBind = GL_TEXTURE_CUBE_MAP;
+        
+        IntBuffer w = BufferUtils.createIntBuffer(1);
+        IntBuffer h = BufferUtils.createIntBuffer(1);
+        IntBuffer channels = BufferUtils.createIntBuffer(1);
+        for (int i = 0; i < facesNameFile.length; i++)
+        {
+            
+            ByteBuffer data = stbi_load(facesNameFile[i], w,h,channels,0);
+            if (data != null)
+            {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
+                             0, GL_RGB,  w.get(0),h.get(0), 0, GL_RGB, GL_UNSIGNED_BYTE, data
+                );
+                stbi_image_free(data);
+            }
+            else
+            {
+                stbi_image_free(data);
+            }
+        }
+        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_REPEAT);
+        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER,GL_REPEAT);
+        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_NEAREST);
+        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_NEAREST);
+        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_NEAREST); //רצוי
+
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); //מצוי
+
+        width  = w.get(0);
+        height = h.get(0);
+        unbind();
+    }
+
     public Texture(int _width,int _height){
         texID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texID);
@@ -74,11 +136,15 @@ public class Texture {
     }
 
     public void bind(){
-        glBindTexture(GL_TEXTURE_2D, texID);
+        glBindTexture(kindOfBind, texID);
     }
 
     public void unbind(){
-        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(kindOfBind, 0);
+    }
+
+    public int getKindOfBind(){
+        return kindOfBind;
     }
 
     public int getID(){

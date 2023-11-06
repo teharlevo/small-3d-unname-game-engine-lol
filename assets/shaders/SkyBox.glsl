@@ -7,15 +7,17 @@ layout (location=3) in float aTexId;
 
 out vec3 TexCoords;
 
-uniform mat4 uProjection;
+uniform mat4 uModel;
 uniform mat4 uView;
+uniform mat4 uProjection;
 
 void main()
 {
+    //TexCoords = aTexCoords;
     TexCoords = aPos;
-    vec4 pos = uProjection * uView * vec4(aPos, 1.0);
-    gl_Position = pos.xyww;
-}  
+    vec4 pos = uProjection * uView * vec4(aPos, aPos.z);
+    gl_Position = pos.xyzw;
+} 
 
 #type fragment
 #version 330 core
@@ -28,5 +30,5 @@ uniform samplerCube skybox;
 void main()
 {    
     //color = texture(skybox, TexCoords);
-    color = vec4(1);
+    color = vec4 (TexCoords,1);
 }
