@@ -75,46 +75,50 @@ public class Texture {
         unbind();
     }
 
-        public Texture(String[] facesNameFile){//cube map
-        texID = glGenTextures();
-        glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
-        kindOfBind = GL_TEXTURE_CUBE_MAP;
-        
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        IntBuffer channels = BufferUtils.createIntBuffer(1);
-        for (int i = 0; i < facesNameFile.length; i++)
-        {
-            
-            ByteBuffer data = stbi_load(facesNameFile[i], w,h,channels,0);
-            if (data != null)
-            {
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
-                             0, GL_RGB,  w.get(0),h.get(0), 0, GL_RGB, GL_UNSIGNED_BYTE, data
-                );
-                stbi_image_free(data);
-            }
-            else
-            {
-                stbi_image_free(data);
-            }
-        }
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_REPEAT);
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER,GL_REPEAT);
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_NEAREST);
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_NEAREST);
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_NEAREST); //רצוי
-
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); //מצוי
-
-        width  = w.get(0);
-        height = h.get(0);
-        unbind();
-    }
+    //public Texture(String[] facesNameFile){//cube map// ירחם השם עליי
+    //    texID = glGenTextures();
+    //    glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
+    //    kindOfBind = GL_TEXTURE_CUBE_MAP;
+    //    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_REPEAT);
+    //    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER,GL_REPEAT);
+    //    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_NEAREST);
+    //    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_NEAREST);
+    //    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_NEAREST); //רצוי
+//
+    //    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); //מצוי
+    //    
+    //    IntBuffer w = BufferUtils.createIntBuffer(1);
+    //    IntBuffer h = BufferUtils.createIntBuffer(1);
+    //    IntBuffer channels = BufferUtils.createIntBuffer(1);
+    //    for (int i = 0; i < facesNameFile.length; i++)
+    //    {
+    //        
+    //        ByteBuffer data = stbi_load(facesNameFile[i], w,h,channels,0);
+    //        if (data != null)
+    //        {
+    //            System.out.println(w.get(0));
+    //            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
+    //                0, GL_RGB,  w.get(0),h.get(0), 0, GL_RGB, GL_UNSIGNED_BYTE
+    //                , data
+    //            );
+    //            stbi_image_free(data);
+    //        }
+    //        else
+    //        {
+    //            System.out.print("gg");
+    //            stbi_image_free(data);
+    //        }
+    //    }
+//
+//
+    //    width  = w.get(0);
+    //    height = h.get(0);
+    //    unbind();
+    //}
 
     public Texture(int _width,int _height){
         texID = glGenTextures();
