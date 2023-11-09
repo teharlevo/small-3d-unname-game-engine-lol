@@ -109,7 +109,7 @@ public class Texture {
     //        }
     //        else
     //        {
-    //            System.out.print("gg");
+    //            System.out.print("טקסטורה תלת מימדית לא עובדת ");
     //            stbi_image_free(data);
     //        }
     //    }

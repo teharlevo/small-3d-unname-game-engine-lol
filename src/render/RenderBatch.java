@@ -1,9 +1,21 @@
 package render;
 
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.glDrawArrays;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glBufferSubData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.FloatBuffer;
-
 
 import org.lwjgl.BufferUtils;
 
@@ -12,7 +24,8 @@ import modeling.Model;
 public class RenderBatch {
 
     private Model model;
-        
+    private RenderrInformationHolder RIH;
+    private Texture[] texUseThisFrame = new Texture[8];
 
     private final int posSize = 3;
     private final int colorSize = 4;
@@ -28,9 +41,10 @@ public class RenderBatch {
 
     private int texsUseCount = 0;
 
-    public RenderBatch(Shader shader,Model _model){
+    public RenderBatch(Shader shader,Model _model,RenderrInformationHolder _RIH){
         s = shader;
         model = _model;
+        RIH = _RIH;
         init();
     }
 
@@ -91,13 +105,16 @@ public class RenderBatch {
         // Bind shader program
         s.use();
 
-        sandInfrmasihnToGPU(c,model);
+        sandInformationToGPU(c,model);
 
         draw();
 
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
         glBindVertexArray(0);
-        //if(model.getTexture() != null){model.getTexture().unbind();}
-        //glBindTexture(model.getTexture().getKindOfBind(), 0);
+        for (int i = 0; i < texsUseCount; i++) {
+            texUseThisFrame[i].unbind();
+        }
 
         s.detach();
     }
@@ -113,15 +130,19 @@ public class RenderBatch {
 
         glDrawArrays(model.getModelShapeNum()
         ,0,model.getMash().getVertices().length/10);
-
         // Unbind everything
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
     }
 
-    private void sandInfrmasihnToGPU(Camrea c,Model m){
+    private void sandInformationToGPU(Camrea c,Model m){
         
-        if(model.getTexture() != null){model.getTexture().bind(); texsUseCount ++;}
+        if(model.getTexture() != null){
+            model.getTexture().bind();
+            glActiveTexture(GL_TEXTURE0 + texsUseCount);
+            texUseThisFrame[texsUseCount] =  model.getTexture();
+            texsUseCount ++;
+        }
         s.uploadMat4f("uView",c.getViewMatrix());
         s.uploadMat4f("uModel",m.getMatrix() );
         s.uploadMat4f("uProjection",
@@ -129,32 +150,28 @@ public class RenderBatch {
         if(model.getMash().needBufferVertex()){
             reBufferVertex();
         }
+        notModelInformationToGPU();
 
     }
 
-    private void g(Texture[] tex,float[] floats,String[] floatsNames,
-        int[] ints,String[] intsNames){//פשוט תפסיק להתעצל
+    private void notModelInformationToGPU(){
 
-        int texsLength = tex.length;
-        for (int i = 0; i < tex.length; i++) {
+        for (int i = 0; i < RIH.getTexs().length; i++) {
 
             if(texsUseCount < 8){
                 glActiveTexture(GL_TEXTURE0 + texsUseCount);
-                tex[i].bind();
+                RIH.getTexs()[i].bind();
+                texUseThisFrame[texsUseCount] =  RIH.getTexs()[i];
                 texsUseCount ++;
             }
         }
         
-        if(floats != null){
-            for (int i = 0; i < floats.length; i++) {
-                s.uploadfloat(floatsNames[i], floats[i]);
-            }
+        for (int i = 0; i < RIH.getFloats().length; i++) {
+            s.uploadfloat(RIH.getFloatsNames()[i],RIH.getFloats()[i]);
         }
 
-        if(ints != null){
-            for (int i = 0; i < ints.length; i++) {
-                s.uploadInt(intsNames[i], ints[i]);
-            }
+        for (int i = 0; i < RIH.getInts().length; i++) {
+            s.uploadInt(RIH.getIntsNames()[i], RIH.getInts()[i]);
         }
     }
 

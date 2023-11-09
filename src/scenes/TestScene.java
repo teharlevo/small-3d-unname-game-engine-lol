@@ -13,11 +13,10 @@ import main.Window;
 import modeling.Model;
 import modeling.ModelShape;
 import modeling.TextMash;
-import render.SkyBox.SkyBox;
+import render.Texture;
 
 public class TestScene extends Scene{
 
-    private SkyBox lol;
     public static void main(String[] args){
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
@@ -39,15 +38,12 @@ public class TestScene extends Scene{
             entt.angleZ = r.nextFloat(-180, 180);
             entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
         }
-
-        lol = new SkyBox();
         
         Entity entt = new Entity();
         entt = new Entity();
         tm = new TextMash("","arial");
         entt.addComponent(new Model(tm.getMash(), -10,10));
-        
-        
+        getRenderer().getRIH().setTexs(new Texture[]{Assets.getTexture("4")});
     }
 
     TextMash tm;
@@ -57,7 +53,6 @@ public class TestScene extends Scene{
 
     public void update(float dt) {
 
-        lol.render();
         float x = 0;
         float y = 0;
         
