@@ -43,6 +43,8 @@ public class RenderBatch {
 
     private int texsUseCount = 0;
 
+    private int[] texSlat = new int[]{0,1,2,3,4,5,6,7};
+
     public RenderBatch(Shader shader,Model _model,RenderrInformationHolder _RIH){
         s = shader;
         model = _model;
@@ -110,17 +112,16 @@ public class RenderBatch {
         sandInformationToGPU(c,model);
 
         draw();
-
+        
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+
         glBindVertexArray(0);
-        for (int i = 0; i < texUseThisFrame.length; i++) {
-            if(texUseThisFrame[i] != null){
-                glActiveTexture(GL_TEXTURE0 + i);
-                texUseThisFrame[i].unbind();
-                glBindTexture(GL_TEXTURE_2D, 0);
-            }
+
+        for (int i = 0; i < texsUseCount; i++) {
+            texUseThisFrame[i].unbind();
         }
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         s.detach();
     }
@@ -144,19 +145,22 @@ public class RenderBatch {
     private void sandInformationToGPU(Camrea c,Model m){
         
         if(model.getTexture() != null){
-            model.getTexture().bind();
-            glActiveTexture(GL_TEXTURE0 + texsUseCount);
             texUseThisFrame[texsUseCount] =  model.getTexture();
             texsUseCount ++;
         }
+        RIHInformationToGPU();
         s.uploadMat4f("uView",c.getViewMatrix());
         s.uploadMat4f("uModel",m.getMatrix() );
         s.uploadMat4f("uProjection",
         c.getProjectionMarix());
+        for (int i = 0; i < texsUseCount; i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            texUseThisFrame[i].bind();
+        }
+        s.uploadIntArray("uTex_Sampler",texSlat);
         if(model.getMash().needBufferVertex()){
             reBufferVertex();
         }
-        RIHInformationToGPU();
 
     }
 
@@ -165,8 +169,6 @@ public class RenderBatch {
         for (int i = 0; i < RIH.getTexs().length; i++) {
 
             if(texsUseCount < 8){
-                glActiveTexture(GL_TEXTURE0 + texsUseCount);
-                RIH.getTexs()[i].bind();
                 texUseThisFrame[texsUseCount] =  RIH.getTexs()[i];
                 texsUseCount ++;
             }
@@ -186,6 +188,8 @@ public class RenderBatch {
     }
 
     public void setShader(Shader newShader){
+        s.detach();
         s = newShader;
+        s.detach();
     }
 }

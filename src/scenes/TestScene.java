@@ -44,6 +44,8 @@ public class TestScene extends Scene{
         tm = new TextMash("","arial");
         entt.addComponent(new Model(tm.getMash(), -10,10));
         getRenderer().getRIH().setTexs(new Texture[]{Assets.getTexture("4")});
+        getRenderer().getRIH().setFloatsNames(new String[]{"time"});
+        getRenderer().getRIH().setFloats(new float[]{0.0f});
     }
 
     TextMash tm;
@@ -52,7 +54,7 @@ public class TestScene extends Scene{
     boolean lines = false;
 
     public void update(float dt) {
-
+        getRenderer().getRIH().setFloats(new float[]{Window.time()});
         float x = 0;
         float y = 0;
         
