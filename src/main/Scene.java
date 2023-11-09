@@ -11,7 +11,7 @@ public abstract class Scene{
     public Scene(){
         cam = new Camrea(0, 0, 0);
         renderer = new Renderer("default",cam);
-        UI = new Renderer("UI",new Camrea(0, 0, 1));
+        UI = new Renderer("UI",new Camrea(0, 0, 1),new int[]{2,4,2,1});
     }
 
     public Renderer getRenderer(){

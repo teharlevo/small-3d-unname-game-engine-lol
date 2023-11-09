@@ -11,6 +11,7 @@ public class Renderer {
     public List<RenderBatch> batchers = new ArrayList<>();
     private Shader s;
     private Camrea c;
+    private int[] arrayStrcher = null;
     
     public Renderer(Shader shader,Camrea camrea){
         s = shader;
@@ -24,8 +25,22 @@ public class Renderer {
         RIH = new RenderrInformationHolder();
     }
 
+    public Renderer(Shader shader,Camrea camrea,int[] _arrayStrcher){
+        s = shader;
+        c = camrea;
+        RIH = new RenderrInformationHolder();
+        arrayStrcher = _arrayStrcher;
+    }
+
+    public Renderer(String shaderName,Camrea camrea,int[] _arrayStrcher){
+        s = Assets.getShader(shaderName);
+        c = camrea;
+        RIH = new RenderrInformationHolder();
+        arrayStrcher = _arrayStrcher;
+    }
+
     public void addModel(Model m){
-        batchers.add(new RenderBatch(s, m,RIH));
+        batchers.add(new RenderBatch(s, m,RIH,arrayStrcher));
     }
 
     public void render(Camrea c){

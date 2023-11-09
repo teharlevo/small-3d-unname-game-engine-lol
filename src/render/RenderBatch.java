@@ -45,18 +45,18 @@ public class RenderBatch {
 
     private int[] texSlat = new int[]{0,1,2,3,4,5,6,7};
 
-    public RenderBatch(Shader shader,Model _model,RenderrInformationHolder _RIH){
+    public RenderBatch(Shader shader,Model _model,RenderrInformationHolder _RIH,int[] arrayStrcher){
         s = shader;
         model = _model;
         RIH = _RIH;
-        init();
+        init(arrayStrcher);
     }
 
     private Shader s;
 
     private int vaoID, vboID;//, eboID;
 
-    public void init() {
+    public void init(int[] arrayStrcher) {
 
         float[] vertexArray = model.getMash().getVertices();
         //int[] elementArray =  m.getMash().getElements();
@@ -83,17 +83,34 @@ public class RenderBatch {
         //glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW);
 
         // Add the vertex attribute pointers
-        glVertexAttribPointer(0, posSize, GL_FLOAT, false, vertexSizeBytes, posOffset);
-        glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, colorOffset);
-        glEnableVertexAttribArray(1);
+        if(arrayStrcher == null){
+            glVertexAttribPointer(0, posSize, GL_FLOAT, false, vertexSizeBytes, posOffset);
+            glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(2, UVSize, GL_FLOAT, false, vertexSizeBytes, UVOffset);
-        glEnableVertexAttribArray(2);
+            glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, colorOffset);
+            glEnableVertexAttribArray(1);
 
-        glVertexAttribPointer(3, texIDSize, GL_FLOAT, false, vertexSizeBytes, texOffset);
-        glEnableVertexAttribArray(3);
+            glVertexAttribPointer(2, UVSize, GL_FLOAT, false, vertexSizeBytes, UVOffset);
+            glEnableVertexAttribArray(2);
+
+            glVertexAttribPointer(3, texIDSize, GL_FLOAT, false, vertexSizeBytes, texOffset);
+            glEnableVertexAttribArray(3);
+        }
+        else{
+            int newVertexSize = 0;
+            for (int i = 0; i < arrayStrcher.length; i++) {
+                newVertexSize += arrayStrcher[i];
+            }
+            int newVertexSizeBytes = newVertexSize * Float.BYTES;
+            int offset = 0;
+            for (int i = 0; i < arrayStrcher.length; i++) {
+                glVertexAttribPointer(i, arrayStrcher[i] 
+                , GL_FLOAT, false,newVertexSizeBytes, offset);
+                glEnableVertexAttribArray(i);
+                offset +=  arrayStrcher[i] * Float.BYTES;
+            }
+        }
         reBufferVertex();
     }
 
@@ -188,8 +205,6 @@ public class RenderBatch {
     }
 
     public void setShader(Shader newShader){
-        s.detach();
         s = newShader;
-        s.detach();
     }
 }
