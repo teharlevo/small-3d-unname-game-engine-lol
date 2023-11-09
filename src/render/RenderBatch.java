@@ -1,6 +1,8 @@
 package render;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
@@ -112,8 +114,12 @@ public class RenderBatch {
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
-        for (int i = 0; i < texsUseCount; i++) {
-            texUseThisFrame[i].unbind();
+        for (int i = 0; i < texUseThisFrame.length; i++) {
+            if(texUseThisFrame[i] != null){
+                glActiveTexture(GL_TEXTURE0 + i);
+                texUseThisFrame[i].unbind();
+                glBindTexture(GL_TEXTURE_2D, 0);
+            }
         }
 
         s.detach();
@@ -150,11 +156,11 @@ public class RenderBatch {
         if(model.getMash().needBufferVertex()){
             reBufferVertex();
         }
-        notModelInformationToGPU();
+        RIHInformationToGPU();
 
     }
 
-    private void notModelInformationToGPU(){
+    private void RIHInformationToGPU(){
 
         for (int i = 0; i < RIH.getTexs().length; i++) {
 
