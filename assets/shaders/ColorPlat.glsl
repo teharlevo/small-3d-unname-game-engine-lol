@@ -24,8 +24,7 @@ void main()
 #type fragment
 #version 330 core
 
-uniform sampler2D uTex_Sampler;
-uniform sampler2D uTex_SamplerTwo;
+uniform sampler2D[8] uTex_Sampler;
 
 in vec4 fColor;
 in vec2 fTexCoords;
@@ -42,8 +41,7 @@ void main()
         int id = int(fTexId);
         thecolor = fColor * texture(uTex_Sampler[id], fTexCoords);
     }
-    thecolor = fColor;
     float k = ((thecolor.g + thecolor.r + thecolor.b)/(3.0));
-    color = texture(uTex_Sampler[1], vec2(0,0));
+    color = texture(uTex_Sampler[1], vec2(k,0));
 
 }

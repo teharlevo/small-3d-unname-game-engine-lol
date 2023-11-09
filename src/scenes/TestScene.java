@@ -43,9 +43,7 @@ public class TestScene extends Scene{
         entt = new Entity();
         tm = new TextMash("","arial");
         entt.addComponent(new Model(tm.getMash(), -10,10));
-        getRenderer().getRIH().setTexs(new Texture[]{Assets.getTexture("4")});
-        getRenderer().getRIH().setFloatsNames(new String[]{"time"});
-        getRenderer().getRIH().setFloats(new float[]{0.0f});
+        getRenderer().getRIH().setTexs(new Texture[]{Assets.getTexture("palt")});
     }
 
     TextMash tm;
@@ -54,7 +52,6 @@ public class TestScene extends Scene{
     boolean lines = false;
 
     public void update(float dt) {
-        getRenderer().getRIH().setFloats(new float[]{Window.time()});
         float x = 0;
         float y = 0;
         
@@ -113,8 +110,8 @@ public class TestScene extends Scene{
             }
         }
         else if(Window.getCurrentScene().getRenderer().getShader() !=
-        Assets.getShader("default")){
-                Window.getCurrentScene().getRenderer().setShader(Assets.getShader("default"));
+        Assets.getShader("ColorPlat")){
+                Window.getCurrentScene().getRenderer().setShader(Assets.getShader("ColorPlat"));
         }
 
         if(Input.getKeyPressNow("y")){

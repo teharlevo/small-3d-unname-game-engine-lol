@@ -25,7 +25,6 @@ void main()
 #version 330 core
 
 uniform sampler2D[8] uTex_Sampler;
-uniform float time;
 
 in vec4 fColor;
 in vec2 fTexCoords;
@@ -39,6 +38,6 @@ void main()
         color = fColor;
     }else{
         int id = int(fTexId);
-        color = fColor * texture(uTex_Sampler[id], vec2(fTexCoords.x + time/10.0,fTexCoords.y - time/20.0));
+        color = fColor * texture(uTex_Sampler[0], vec2(fTexCoords.x,fTexCoords.y));
     }
 }
