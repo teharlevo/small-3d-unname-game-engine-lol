@@ -38,6 +38,7 @@ public class TestScene extends Scene{
             entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
         }
     }
+    
     int Music = 0;
     String text = "";
     boolean lines = false;
