@@ -3,6 +3,7 @@ package render;
 import static org.lwjgl.opengl.GL43.*;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
@@ -39,7 +40,7 @@ public class RenderBatch {
 
     private Shader s;
 
-    private int vaoID, vboID;//, eboID;
+    private int vaoID, vboID,eboID;
 
     public void init(int[] arrayStrcher) {
 
@@ -59,14 +60,6 @@ public class RenderBatch {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
         glBindVertexArray(vboID);
-
-        // Create the indices and upload
-        //IntBuffer elementBuffer = BufferUtils.createIntBuffer(elementArray.length);
-        //elementBuffer.put(elementArray).flip();
-//
-        //eboID = glGenBuffers();
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW);
 
         // Add the vertex attribute pointers
 
@@ -99,6 +92,17 @@ public class RenderBatch {
                 vertexSize += arrayStrcher[i];
             }
         }
+
+        int[] elementArray = new int[(int)(vertexArray.length/vertexSize)];
+        for (int i = 0; i < elementArray.length; i++) {
+            elementArray[i] = i;
+        }//זמני ביתר יש להשמיד
+        IntBuffer elementBuffer = BufferUtils.createIntBuffer(elementArray.length);
+        elementBuffer.put(elementArray).flip();
+
+        eboID = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW);
         reBufferVertex();
     }
 
@@ -117,11 +121,6 @@ public class RenderBatch {
         sandInformationToGPU(c,model);
 
         draw();
-        
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-
-        glBindVertexArray(0);
 
         for (int i = 0; i < texsUseCount; i++) {
             texUseThisFrame[i].unbind();
@@ -137,11 +136,14 @@ public class RenderBatch {
         // Enable the vertex attribute pointers
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
 
-        //glDrawElements(GL_TRIANGLES, m.getMash().getVertices().length/10, GL_UNSIGNED_INT, 0);
+        glDrawElementsInstanced(GL_TRIANGLES, model.getMash().getVertices().length/10
+        , GL_UNSIGNED_INT, 0,30);
 
-        glDrawArrays(model.getModelShapeNum()
-        ,0,model.getMash().getVertices().length/vertexSize);
+        //glDrawArrays(model.getModelShapeNum()
+        //,0,model.getMash().getVertices().length/vertexSize);
         // Unbind everything
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);

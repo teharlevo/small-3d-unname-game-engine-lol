@@ -46,7 +46,6 @@ public class Shader {
             } else if (firstpetern.equals("compute")){
                 computesrc = splitString[1];
                 compute = true;
-                System.out.println("l0l");
             }
             else{
                 throw new IOException("Unexpected token '" + firstpetern + "'");
@@ -96,7 +95,6 @@ public class Shader {
                 System.out.println(glGetProgramInfoLog(SP, len));
                 assert false : "";
             }
-            System.out.println(computesrc);
             return;
         }
         vertexID = glCreateShader(GL_VERTEX_SHADER);
