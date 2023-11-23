@@ -1,4 +1,5 @@
 package scenes;
+
 import java.util.Random;
 
 import main.Assets;
@@ -12,8 +13,6 @@ import main.Scene;
 import main.Window;
 import modeling.Model;
 import modeling.ModelShape;
-import modeling.TextMash;
-import render.Texture;
 
 public class TestScene extends Scene{
 
@@ -38,15 +37,7 @@ public class TestScene extends Scene{
             entt.angleZ = r.nextFloat(-180, 180);
             entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
         }
-        
-        Entity entt = new Entity();
-        entt = new Entity();
-        tm = new TextMash("","arial");
-        entt.addComponent(new Model(tm.getMash(), -10,10));
-        getRenderer().getRIH().setTexs(new Texture[]{Assets.getTexture("palt")});
     }
-
-    TextMash tm;
     int Music = 0;
     String text = "";
     boolean lines = false;
@@ -110,8 +101,8 @@ public class TestScene extends Scene{
             }
         }
         else if(Window.getCurrentScene().getRenderer().getShader() !=
-        Assets.getShader("ColorPlat")){
-                Window.getCurrentScene().getRenderer().setShader(Assets.getShader("ColorPlat"));
+        Assets.getShader("default")){
+                Window.getCurrentScene().getRenderer().setShader(Assets.getShader("default"));
         }
 
         if(Input.getKeyPressNow("y")){
@@ -130,14 +121,7 @@ public class TestScene extends Scene{
         if(Input.getKeyPressNow("0")){
             SoundMaster.stopSound(Music);
         }
-        if(Input.getKeyPress("u")){
-            tm.cangeText("time" + Window.time());
-        }
-        else{
-            if(!tm.getText().equals(text)){
-                tm.cangeText(text);
-            }
-        }
+
         if(Input.getKeysPressNow().length > 0){
             text += Input.getKeysPressNow()[0];
         }

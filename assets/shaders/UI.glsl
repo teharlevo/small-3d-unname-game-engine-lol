@@ -1,6 +1,6 @@
 #type vertex
 #version 330 core
-layout (location=0) in vec2 aPos;
+layout (location=0) in vec3 aPos;
 layout (location=1) in vec4 aColor;
 layout (location=2) in vec2 aTexCoords;
 layout (location=3) in float aTexId;
@@ -18,7 +18,7 @@ void main()
     fColor = aColor;
     fTexCoords = aTexCoords;
     fTexId = aTexId;
-    vec4 newPos = uProjection * uView * uModel * vec4(aPos,0, 0);
+    vec4 newPos = uProjection * uView * uModel * vec4(aPos, aPos.z);
     gl_Position = vec4(newPos.x,newPos.y,newPos.z,1);
 }
 

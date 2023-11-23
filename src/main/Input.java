@@ -14,7 +14,7 @@ public class Input  {
         ,295,296,297,298,299,300,314,320,321,322,323,324,325,326,327,328,329};
     private static String[] keyNames = new String[]{"space","'",",","-",".","/","0","1","2","3","4","5","6","7","8","9",";","="
     ,"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","left_bracket","left_bracket"
-    ,"right_bracket","rave_accent","escape","enter","tab","backspace","insert","delete","right","left","down","up"
+    ,"right_bracket","rave_accent","escape",new String(new char[]{'\n'}),"tab","backspace","insert","delete","right","left","down","up"
     ,"f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12","kp0","kp1","kp2","kp3","kp4","kp5","kp6","kp7","kp8","kp9"};
 
     private static float posX,posY;

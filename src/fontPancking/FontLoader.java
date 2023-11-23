@@ -45,8 +45,7 @@ public class FontLoader {
             charToInfo.put(c,new CharInfo(c, (float)x/(float)tex.width()
             ,1 - (float)y/(float)tex.height() - (float)h/(float)tex.height()
             , (float)w/(float)tex.width(), (float)h/(float)tex.height()
-            ,(float)Xoffset/(float)tex.width(),
-            (float)(h)/(float)tex.height() - (float)Yoffset/(float)tex.height(),
+            ,(float)Xoffset/(float)tex.width(),(float)Yoffset/(float)tex.height(),
             (float)Xadvance/(float)tex.width()));
         }
     }

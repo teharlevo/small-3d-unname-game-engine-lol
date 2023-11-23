@@ -1,21 +1,6 @@
 package render;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glBufferSubData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL43.*;
 
 import java.nio.FloatBuffer;
 
@@ -38,7 +23,7 @@ public class RenderBatch {
     private final int colorOffset = posOffset + posSize * Float.BYTES;
     private final int UVOffset = colorOffset + colorSize * Float.BYTES;
     private final int texOffset = UVOffset + UVSize * Float.BYTES;
-    private final int vertexSize = 10;
+    private int vertexSize = 10;
     private final int vertexSizeBytes = vertexSize * Float.BYTES;
 
     private int texsUseCount = 0;
@@ -73,6 +58,7 @@ public class RenderBatch {
         vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+        glBindVertexArray(vboID);
 
         // Create the indices and upload
         //IntBuffer elementBuffer = BufferUtils.createIntBuffer(elementArray.length);
@@ -104,11 +90,13 @@ public class RenderBatch {
             }
             int newVertexSizeBytes = newVertexSize * Float.BYTES;
             int offset = 0;
+            vertexSize = 0;
             for (int i = 0; i < arrayStrcher.length; i++) {
                 glVertexAttribPointer(i, arrayStrcher[i] 
                 , GL_FLOAT, false,newVertexSizeBytes, offset);
                 glEnableVertexAttribArray(i);
                 offset +=  arrayStrcher[i] * Float.BYTES;
+                vertexSize += arrayStrcher[i];
             }
         }
         reBufferVertex();
@@ -153,7 +141,7 @@ public class RenderBatch {
         //glDrawElements(GL_TRIANGLES, m.getMash().getVertices().length/10, GL_UNSIGNED_INT, 0);
 
         glDrawArrays(model.getModelShapeNum()
-        ,0,model.getMash().getVertices().length/10);
+        ,0,model.getMash().getVertices().length/vertexSize);
         // Unbind everything
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);

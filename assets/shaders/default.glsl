@@ -1,9 +1,10 @@
 #type vertex
-#version 330 core
+#version 430 core
 layout (location=0) in vec3 aPos;
 layout (location=1) in vec4 aColor;
 layout (location=2) in vec2 aTexCoords;
 layout (location=3) in float aTexId;
+layout (location=4) in float offset;
 
 uniform mat4 uModel;
 uniform mat4 uView;
@@ -22,9 +23,10 @@ void main()
 }
 
 #type fragment
-#version 330 core
+#version 430 core
 
 uniform sampler2D[8] uTex_Sampler;
+uniform float time;
 
 in vec4 fColor;
 in vec2 fTexCoords;
@@ -38,6 +40,6 @@ void main()
         color = fColor;
     }else{
         int id = int(fTexId);
-        color = fColor * texture(uTex_Sampler[0], vec2(fTexCoords.x,fTexCoords.y));
+        color = fColor * texture(uTex_Sampler[0], vec2(fTexCoords.x,fTexCoords.y ));
     }
 }

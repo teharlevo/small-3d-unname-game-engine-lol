@@ -1,25 +1,5 @@
 package render;
-
-import static org.lwjgl.opengl.GL11.GL_LINEAR;
-import static org.lwjgl.opengl.GL11.GL_NEAREST;
-import static org.lwjgl.opengl.GL11.GL_REPEAT;
-import static org.lwjgl.opengl.GL11.GL_RGB;
-import static org.lwjgl.opengl.GL11.GL_RGBA;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
-import static org.lwjgl.opengl.GL11.glTexParameteri;
-import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
-import static org.lwjgl.opengl.GL12.GL_TEXTURE_WRAP_R;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL43.*;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -37,6 +17,7 @@ public class Texture {
     public Texture(String path){
 
         texID = glGenTextures();
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texID);
         kindOfBind = GL_TEXTURE_2D;
 
@@ -77,6 +58,7 @@ public class Texture {
 
     //public Texture(String[] facesNameFile){//cube map// ירחם השם עליי
     //    texID = glGenTextures();
+    //    glActiveTexture(GL_TEXTURE0);
     //    glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
     //    kindOfBind = GL_TEXTURE_CUBE_MAP;
     //    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_REPEAT);
@@ -122,6 +104,7 @@ public class Texture {
 
     public Texture(int _width,int _height){
         texID = glGenTextures();
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texID);
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height,

@@ -1,6 +1,6 @@
 package render;
 
-import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL43.*;
 
 
 public class FrameBuffer {
