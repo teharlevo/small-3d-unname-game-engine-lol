@@ -129,13 +129,13 @@ public class TestScene extends Scene{
         if(Input.getKeyPress("p")){
             lines = true;
             for (int i = 0; i < k.length; i++) {
-                k[i].setModelShape(ModelShape.Lines);
+                k[i].getMash().setModelShape(ModelShape.Lines);
             }
         }
         else if(lines == true){
             lines = false;
             for (int i = 0; i < k.length; i++) {
-                k[i].setModelShape(ModelShape.triangles);
+                k[i].getMash().setModelShape(ModelShape.triangles);
             }
         }
     }

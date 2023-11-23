@@ -19,7 +19,7 @@ void main()
     fColor = aColor;
     fTexCoords = aTexCoords;
     fTexId = aTexId;
-    gl_Position = uProjection * uView * uModel * vec4(aPos, 1.0) + vec4(gl_InstanceID * 2,0,0,0);
+    gl_Position = uProjection * uView * uModel * vec4(aPos + vec3(0,offset,0), 1.0);
 }
 
 #type fragment

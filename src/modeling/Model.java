@@ -22,7 +22,6 @@ public class Model extends Component{
     private float angleX;
     private float angleY;
     private float angleZ;
-    private ModelShape mp;
 
     public Model(String mashName,float x,float y,float z,Renderer renderer){
         createFanc(Assets.getModelMesh(mashName),x,y,z,renderer);
@@ -62,30 +61,12 @@ public class Model extends Component{
         mash = _mash;
         tex = mash.getTexture();
         renderer.addModel(this);
-        mp = ModelShape.triangles;
     } 
 
     public void start(){}
 
     public void update(float dt){}
 
-    public void setModelShape(ModelShape newNp){
-        mp = newNp;
-    }
-
-    public ModelShape getModelShape(){
-        return mp;
-    }
-
-    public int getModelShapeNum(){
-        if(mp == ModelShape.Lines){
-            return GL_LINES;
-        }
-        else if(mp == ModelShape.triangles){
-            return GL_TRIANGLES;
-        }
-        return 0;
-    }
 
     public Vector3f getPos(){
         return pos;

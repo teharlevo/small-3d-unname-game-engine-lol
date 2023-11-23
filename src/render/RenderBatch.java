@@ -1,5 +1,26 @@
 package render;
 
+import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glBufferSubData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
+import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 import static org.lwjgl.opengl.GL43.*;
 
 import java.nio.FloatBuffer;
@@ -7,10 +28,12 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
+import main.Window;
 import modeling.Model;
 
 public class RenderBatch {
 
+    private int mashID;
     private Model model;
     private RenderrInformationHolder RIH;
     private Texture[] texUseThisFrame = new Texture[8];
@@ -56,25 +79,33 @@ public class RenderBatch {
         vertexBuffer.put(vertexArray).flip();
 
         // Create VBO upload the vertex buffer
+        float[] modelArray = new float[]{0};
         vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
-        glBindVertexArray(vboID);
+
+        FloatBuffer modelBuffer = BufferUtils.createFloatBuffer(modelArray.length);
+        modelBuffer.put(modelArray).flip();
 
         // Add the vertex attribute pointers
 
         if(arrayStrcher == null){
-            glVertexAttribPointer(0, posSize, GL_FLOAT, false, vertexSizeBytes, posOffset);
+            glBindVertexArray(vaoID);
             glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, posSize, GL_FLOAT, false, vertexSizeBytes, posOffset);
 
-            glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, colorOffset);
             glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, colorOffset);
 
-            glVertexAttribPointer(2, UVSize, GL_FLOAT, false, vertexSizeBytes, UVOffset);
             glEnableVertexAttribArray(2);
+            glVertexAttribPointer(2, UVSize, GL_FLOAT, false, vertexSizeBytes, UVOffset);
 
-            glVertexAttribPointer(3, texIDSize, GL_FLOAT, false, vertexSizeBytes, texOffset);
             glEnableVertexAttribArray(3);
+            glVertexAttribPointer(3, texIDSize, GL_FLOAT, false, vertexSizeBytes, texOffset);
+
+            glEnableVertexAttribArray(4);
+            glBindBuffer(GL_ARRAY_BUFFER, vboID); // this attribute comes from a different vertex buffer
+            glVertexAttribPointer(4, 2, GL_FLOAT,false, 2 * Float.BYTES, 0);
         }
         else{
             int newVertexSize = 0;
@@ -136,11 +167,9 @@ public class RenderBatch {
         // Enable the vertex attribute pointers
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-        glEnableVertexAttribArray(3);
 
-        glDrawElementsInstanced(GL_TRIANGLES, model.getMash().getVertices().length/10
-        , GL_UNSIGNED_INT, 0,30);
+        glDrawElementsInstanced(model.getMash().getModelShapeNum(), model.getMash().getVertices().length/vertexSize
+        , GL_UNSIGNED_INT, 0,1);
 
         //glDrawArrays(model.getModelShapeNum()
         //,0,model.getMash().getVertices().length/vertexSize);

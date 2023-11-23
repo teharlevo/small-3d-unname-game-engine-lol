@@ -1,5 +1,8 @@
 package modeling;
 
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+
 import main.Assets;
 import main.Window;
 import render.Texture;
@@ -9,6 +12,7 @@ public class Mash {
     private float[] vertices;
     private Texture textuere;
     private boolean dartyFlag;
+    private ModelShape mp = ModelShape.triangles;
 
     public Mash(float[] mashVertices,Texture tex){
         vertices = mashVertices; 
@@ -63,5 +67,23 @@ public class Mash {
         boolean df = dartyFlag;
         dartyFlag = false;
         return df;
+    }
+
+    public void setModelShape(ModelShape newNp){
+        mp = newNp;
+    }
+
+    public ModelShape getModelShape(){
+        return mp;
+    }
+
+    public int getModelShapeNum(){
+        if(mp == ModelShape.Lines){
+            return GL_LINES;
+        }
+        else if(mp == ModelShape.triangles){
+            return GL_TRIANGLES;
+        }
+        return 0;
     }
 }
