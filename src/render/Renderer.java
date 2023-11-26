@@ -40,6 +40,12 @@ public class Renderer {
     }
 
     public void addModel(Model m){
+        for (int i = 0; i < batchers.size(); i++) {
+            if(m.getMash().getMashID() == batchers.get(i).getMash().getMashID()){
+                batchers.get(i).addModel(m);
+                return;
+            }
+        }
         batchers.add(new RenderBatch(s, m,RIH,arrayStrcher));
     }
 

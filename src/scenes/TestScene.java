@@ -23,12 +23,12 @@ public class TestScene extends Scene{
         new Window(900,600,"test");
     }
 
-    Model k[] = new Model[100];
+    Model k[] = new Model[1000];
     public void init() {
         Random r = new Random();
-        float dis = 5;
+        float dis = 10;
         String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             Entity entt = new Entity();
             entt.pos = new Vector3f(
                 r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));

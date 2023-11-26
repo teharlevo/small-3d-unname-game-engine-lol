@@ -1,24 +1,4 @@
 package render;
-
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glBufferSubData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
 import static org.lwjgl.opengl.GL43.*;
 
 import java.nio.FloatBuffer;
@@ -26,15 +6,16 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import main.Window;
+import modeling.Mash;
 import modeling.Model;
 
 public class RenderBatch {
 
-    private int mashID;
-    private Model model;
+    private Model[] models;
     private RenderrInformationHolder RIH;
     private Texture[] texUseThisFrame = new Texture[8];
+
+    private Mash theMash;
 
     private final int posSize = 3;
     private final int colorSize = 4;
@@ -54,8 +35,10 @@ public class RenderBatch {
 
     public RenderBatch(Shader shader,Model _model,RenderrInformationHolder _RIH,int[] arrayStrcher){
         s = shader;
-        model = _model;
         RIH = _RIH;
+        models = new Model[1];
+        models[0] = _model;
+        theMash = _model.getMash();
         init(arrayStrcher);
     }
 
@@ -65,7 +48,7 @@ public class RenderBatch {
 
     public void init(int[] arrayStrcher) {
 
-        float[] vertexArray = model.getMash().getVertices();
+        float[] vertexArray = theMash.getVertices();
         //int[] elementArray =  m.getMash().getElements();
         
 
@@ -77,34 +60,30 @@ public class RenderBatch {
         vertexBuffer.put(vertexArray).flip();
 
         // Create VBO upload the vertex buffer
-        float[] modelArray = new float[]{0,1,2,1,30,1};
         vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferData(GL_ARRAY_BUFFER,vertexArray, vertexArray.length * vertexSize * Float.BYTES , GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+        glBindVertexArray(vboID);
 
-        FloatBuffer modelBuffer = BufferUtils.createFloatBuffer(modelArray.length);
-        modelBuffer.put(modelArray).flip();
+        // Create the indices and upload
 
         // Add the vertex attribute pointers
 
         if(arrayStrcher == null){
-            glBindVertexArray(vaoID);
-            glEnableVertexAttribArray(0);
             glVertexAttribPointer(0, posSize, GL_FLOAT, false, vertexSizeBytes, posOffset);
+            glEnableVertexAttribArray(0);
 
-            glEnableVertexAttribArray(1);
             glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, colorOffset);
+            glEnableVertexAttribArray(1);
 
-            glEnableVertexAttribArray(2);
             glVertexAttribPointer(2, UVSize, GL_FLOAT, false, vertexSizeBytes, UVOffset);
+            glEnableVertexAttribArray(2);
 
-            glEnableVertexAttribArray(3);
             glVertexAttribPointer(3, texIDSize, GL_FLOAT, false, vertexSizeBytes, texOffset);
-
-            glBindBuffer(GL_ARRAY_BUFFER, vboID); // this attribute comes from a different vertex buffer
-            glEnableVertexAttribArray(4);
-            glVertexAttribPointer(4, 2, GL_FLOAT,false, 2 * Float.BYTES, 0);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glEnableVertexAttribArray(3);
+            //glBindVertexArray(vboID);
+            //glVertexAttribPointer(0,UVSize, GL_FLOAT, false,UVSize * Float.BYTES, 0);
+            //glEnableVertexAttribArray(0);
         }
         else{
             int newVertexSize = 0;
@@ -122,8 +101,7 @@ public class RenderBatch {
                 vertexSize += arrayStrcher[i];
             }
         }
-
-        int[] elementArray = new int[(int)(vertexArray.length/vertexSize)];
+         int[] elementArray = new int[(int)(vertexArray.length/vertexSize)];
         for (int i = 0; i < elementArray.length; i++) {
             elementArray[i] = i;
         }//זמני ביתר יש להשמיד
@@ -137,7 +115,7 @@ public class RenderBatch {
     }
 
     private void reBufferVertex(){
-        float[] vertexArray = model.getMash().getVertices();
+        float[] vertexArray = theMash.getVertices();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertexArray);
     }
@@ -148,9 +126,12 @@ public class RenderBatch {
         // Bind shader program
         s.use();
 
-        sandInformationToGPU(c,model);
+        sandInformationToGPU(c);
 
         draw();
+        
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
 
         for (int i = 0; i < texsUseCount; i++) {
             texUseThisFrame[i].unbind();
@@ -167,25 +148,27 @@ public class RenderBatch {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 
-        glDrawElementsInstanced(model.getMash().getModelShapeNum(), model.getMash().getVertices().length/vertexSize
-        , GL_UNSIGNED_INT, 0,3);
+        glDrawElementsInstanced(theMash.getModelShapeNum(), 
+        theMash.getVertices().length/vertexSize, GL_UNSIGNED_INT, 0,models.length);
 
         //glDrawArrays(model.getModelShapeNum()
-        //,0,model.getMash().getVertices().length/vertexSize);
+        //,0,theMash.getVertices().length/vertexSize);
         // Unbind everything
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
     }
 
-    private void sandInformationToGPU(Camrea c,Model m){
+    private void sandInformationToGPU(Camrea c){
         
-        if(model.getTexture() != null){
-            texUseThisFrame[texsUseCount] =  model.getTexture();
+        if(theMash.getTexture() != null){
+            texUseThisFrame[texsUseCount] =  theMash.getTexture();
             texsUseCount ++;
         }
         RIHInformationToGPU();
         s.uploadMat4f("uView",c.getViewMatrix());
-        s.uploadMat4f("uModel",m.getMatrix() );
+        for (int index = 0; index < models.length; index++) {
+            s.uploadMat4f("uModel[" + index + "]",models[index].getMatrix() );
+        }
         s.uploadMat4f("uProjection",
         c.getProjectionMarix());
         for (int i = 0; i < texsUseCount; i++) {
@@ -193,10 +176,16 @@ public class RenderBatch {
             texUseThisFrame[i].bind();
         }
         s.uploadIntArray("uTex_Sampler",texSlat);
-        if(model.getMash().needBufferVertex()){
-            reBufferVertex();
-        }
 
+    }
+
+    public void addModel(Model m){
+        Model newModels[] = new Model[models.length + 1];
+        for (int i = 0; i < models.length; i++) {
+            newModels[i] = models[i];
+        }
+        newModels[newModels.length - 1] = m;
+        models = newModels;
     }
 
     private void RIHInformationToGPU(){
@@ -224,5 +213,9 @@ public class RenderBatch {
 
     public void setShader(Shader newShader){
         s = newShader;
+    }
+
+    public Mash getMash(){
+        return theMash;
     }
 }
