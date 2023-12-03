@@ -119,8 +119,8 @@ public class RenderBatch {
             //glVertexAttribPointer(0,UVSize, GL_FLOAT, false,UVSize * Float.BYTES, 0);
             //glEnableVertexAttribArray(0);
             glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
-            glVertexAttribPointer(4, texIDSize, GL_FLOAT, false, Float.SIZE, 0);
             glEnableVertexAttribArray(4);
+            glVertexAttribPointer(4, texIDSize, GL_FLOAT, false, Float.BYTES, 0);
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glVertexAttribDivisor(4, 1);
@@ -157,7 +157,7 @@ public class RenderBatch {
     private void reBufferVertex(){
         float[] vertexArray = theMash.getVertices();
         glBindBuffer(GL_ARRAY_BUFFER, vertexVboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertexArray);
+        //glBufferSubData(GL_ARRAY_BUFFER, 0, vertexArray);
     }
     
     public void update(Camrea c) {
