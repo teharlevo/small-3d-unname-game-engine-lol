@@ -101,21 +101,22 @@ public class RenderBatch {
             int vec4Size = 4 * Float.BYTES;
             glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
             glEnableVertexAttribArray(4); 
-            glVertexAttribPointer(4, 4, GL_FLOAT, false, 4 * vec4Size, 0);
+            glVertexAttribPointer(4, 4, GL_FLOAT, false, 5 * vec4Size, 0);
             glEnableVertexAttribArray(5); 
-            glVertexAttribPointer(5, 4, GL_FLOAT, false, 4 * vec4Size, (1 * vec4Size));
+            glVertexAttribPointer(5, 4, GL_FLOAT, false, 5 * vec4Size, (1 * vec4Size));
             glEnableVertexAttribArray(6); 
-            glVertexAttribPointer(6, 4, GL_FLOAT, false, 4 * vec4Size, (2 * vec4Size));
+            glVertexAttribPointer(6, 4, GL_FLOAT, false, 5 * vec4Size, (2 * vec4Size));
             glEnableVertexAttribArray(7); 
-            glVertexAttribPointer(7, 4, GL_FLOAT, false, 4 * vec4Size, (3 * vec4Size));
+            glVertexAttribPointer(7, 4, GL_FLOAT, false, 5 * vec4Size, (3 * vec4Size));
             glEnableVertexAttribArray(8); 
-            glVertexAttribPointer(8, 4, GL_FLOAT, false, 4 * vec4Size, (4 * vec4Size));
+            glVertexAttribPointer(8, 4, GL_FLOAT, false, 5 * vec4Size, (4 * vec4Size));
 
             glVertexAttribDivisor(4, 1);
             glVertexAttribDivisor(5, 1);
             glVertexAttribDivisor(6, 1);
             glVertexAttribDivisor(7, 1);
             glVertexAttribDivisor(8, 1);
+
         }
         else{
             int newVertexSize = 0;
@@ -234,7 +235,7 @@ public class RenderBatch {
         newModels[newModels.length - 1] = m;
         models = newModels;
         
-        float[] instancArray = new float[16 * models.length];
+        float[] instancArray = new float[20 * models.length];
         FloatBuffer instancBuffer = BufferUtils.createFloatBuffer(instancArray.length);
         instancBuffer.put(instancArray).flip();
 

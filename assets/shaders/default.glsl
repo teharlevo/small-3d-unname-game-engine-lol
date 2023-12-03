@@ -5,7 +5,7 @@ layout (location=1) in vec4 aColor;
 layout (location=2) in vec2 aTexCoords;
 layout (location=3) in float aTexId;
 layout (location=4) in mat4 aModel;
-layout (location=5) in vec4 aModelColor;
+layout (location=7) in vec4 aModelColor;
 
 uniform mat4 uView;
 uniform mat4 uProjection;
@@ -17,6 +17,7 @@ out float  fTexId;
 void main()
 {
     fColor = aColor * aModelColor;
+    //fColor = aColor;
     fTexCoords = aTexCoords;
     fTexId = aTexId;
     gl_Position = uProjection * uView * aModel * vec4(aPos, 1.0);
@@ -40,6 +41,6 @@ void main()
         color = fColor;
     }else{
         int id = int(fTexId);
-        color = fColor * texture(uTex_Sampler[0], vec2(fTexCoords.x,fTexCoords.y ));
+        color = fColor * texture(uTex_Sampler[id], vec2(fTexCoords.x,fTexCoords.y ));
     }
 }

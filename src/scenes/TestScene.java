@@ -38,13 +38,14 @@ public class TestScene extends Scene{
             entt.angleY = r.nextFloat(-180, 180);
             entt.angleZ = r.nextFloat(-180, 180);
             k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
-            k[i].setColor(0,0,1,1);
+            k[i].setColor(1,1,1,1);
             entt.addComponent(k[i]);
         }
         //for (int i = 0; i < modelName.length; i++) {
         //    Entity entt = new Entity();
         //    entt.addComponent(k[i] = new Model(modelName[i],i * 5,0,0));
         //}
+        
     }
     
     int Music = 0;
