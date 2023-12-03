@@ -5,7 +5,7 @@ layout (location=1) in vec4 aColor;
 layout (location=2) in vec2 aTexCoords;
 layout (location=3) in float aTexId;
 layout (location=4) in mat4 aModel;
-layout (location=7) in vec4 aModelColor;
+layout (location=8) in vec4 aModelColor;
 
 uniform mat4 uView;
 uniform mat4 uProjection;
