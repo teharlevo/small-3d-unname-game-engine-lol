@@ -13,6 +13,7 @@ import main.Scene;
 import main.Window;
 import modeling.Model;
 import modeling.ModelShape;
+import modeling.TextMash;
 
 public class TestScene extends Scene{
 
@@ -23,12 +24,12 @@ public class TestScene extends Scene{
         new Window(900,600,"test");
     }
 
-    Model k[] = new Model[1000];
+    Model k[] = new Model[500];
     public void init() {
         Random r = new Random();
         float dis = 10;
         String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 500; i++) {
             Entity entt = new Entity();
             entt.pos = new Vector3f(
                 r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
@@ -37,6 +38,7 @@ public class TestScene extends Scene{
             entt.angleZ = r.nextFloat(-180, 180);
             entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
         }
+        new Entity().addComponent(new Model(new TextMash("lol", "arial").getMash(),0,0));
     }
     
     int Music = 0;
@@ -44,6 +46,7 @@ public class TestScene extends Scene{
     boolean lines = false;
 
     public void update(float dt) {
+        render();
         float x = 0;
         float y = 0;
         

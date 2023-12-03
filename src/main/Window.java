@@ -171,12 +171,6 @@ public class Window {
         Physics2D.update(dt);
         SoundMaster.update();
 
-        currentScene.getRenderer().render();
-
-        glDisable(GL_DEPTH_TEST);
-        currentScene.getUIRenderer().render();
-        glEnable(GL_DEPTH_TEST);
-
         currentScene.update(dt);
         Input.update(window);
     }
