@@ -48,8 +48,8 @@ public class TestScene extends Scene{
         //    Entity entt = new Entity();
         //    entt.addComponent(k[i] = new Model(modelName[i],i * 5,0,0));
         //}
-        g =new Renderer("default", cam, new int[]{3,4,2,1,0,4,4,4,4,3});
-        float [] p = new float[]{1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,1,1,1,0.5f};
+        g =new Renderer("testShit", cam, new int[]{3,4,2,1,0,3});
+        float [] p = new float[]{0,0,-2,1,1,1};
         System.out.println(p.length);
         Model j =new Model(new Mash("4"), 0,0,-1,g,p);
         j.setAngle(30, 30,30);

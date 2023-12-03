@@ -173,40 +173,20 @@ public class RenderBatch {
 
             int newIcntceSizeBytes = newIcntceSize * Float.BYTES;
             offset = 0;
-            int vec4Size = 4 * Float.BYTES;
+
             glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
-            glEnableVertexAttribArray(4); 
-            glVertexAttribPointer(4, 4, GL_FLOAT, false, instanceSizeBytes, 0);
-            glEnableVertexAttribArray(5); 
-            glVertexAttribPointer(5, 4, GL_FLOAT, false, instanceSizeBytes, (1 * vec4Size));
-            glEnableVertexAttribArray(6); 
-            glVertexAttribPointer(6, 4, GL_FLOAT, false, instanceSizeBytes, (2 * vec4Size));
-            glEnableVertexAttribArray(7); 
-            glVertexAttribPointer(7, 4, GL_FLOAT, false, instanceSizeBytes, (3 * vec4Size));
-            glEnableVertexAttribArray(8); 
-            glVertexAttribPointer(8, 4, GL_FLOAT, false, instanceSizeBytes, (4 * vec4Size));
+            for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
+                glEnableVertexAttribArray(i-1); 
+                glVertexAttribPointer(i-1, arrayStrcher[i], GL_FLOAT, false,newIcntceSizeBytes, offset);
+                offset += arrayStrcher[i] * Float.BYTES;
+            }
 
-            glVertexAttribDivisor(4, 1);
-            glVertexAttribDivisor(5, 1);
-            glVertexAttribDivisor(6, 1);
-            glVertexAttribDivisor(7, 1);
-            glVertexAttribDivisor(8, 1);
-
-            //glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
-//
-            //for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
-            //    glEnableVertexAttribArray(i - 1);
-            //    glVertexAttribPointer(i - 1, arrayStrcher[i] 
-            //    , GL_FLOAT, false,newIcntceSizeBytes, offset);
-            //    offset +=  arrayStrcher[i] * Float.BYTES;
-            //    instanceSize += arrayStrcher[i];
-            //}
-//
-            //for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
-            //    glVertexAttribDivisor(i - 1, 1);
-            //    System.out.println((i - 1) + ",");
-            //}
-
+            for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
+                glVertexAttribDivisor(i - 1, 1);
+                System.out.println((i - 1) + ",");
+            }
+            instanceSize = newIcntceSize;
+            
         }
         int[] elementArray = new int[(int)(vertexArray.length/vertexSize)];
         for (int i = 0; i < elementArray.length; i++) {
