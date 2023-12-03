@@ -4,7 +4,7 @@ layout (location=0) in vec3 aPos;
 layout (location=1) in vec4 aColor;
 layout (location=2) in vec2 aTexCoords;
 layout (location=3) in float aTexId;
-//layout (location=4) in vec2 offset;
+layout (location=4) in float offset;
 
 uniform mat4[200] uModel;
 uniform mat4 uView;
@@ -19,7 +19,7 @@ void main()
     fColor = aColor;
     fTexCoords = aTexCoords;
     fTexId = aTexId;
-    gl_Position = uProjection * uView * uModel[gl_InstanceID] * vec4(aPos, 1.0);
+    gl_Position = uProjection * uView * uModel[0] * vec4(aPos + vec3(0,gl_InstanceID,offset), 1.0);
 }
 
 #type fragment

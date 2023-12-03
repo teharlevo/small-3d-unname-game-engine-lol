@@ -27,18 +27,21 @@ public class TestScene extends Scene{
     Model k[] = new Model[500];
     public void init() {
         Random r = new Random();
-        float dis = 10;
+        float dis = 1;
         String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
-        for (int i = 0; i < 500; i++) {
+        //for (int i = 0; i < 500; i++) {
+        //    Entity entt = new Entity();
+        //    entt.pos = new Vector3f(
+        //        r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
+        //    entt.angleX = r.nextFloat(-180, 180);
+        //    entt.angleY = r.nextFloat(-180, 180);
+        //    entt.angleZ = r.nextFloat(-180, 180);
+        //    entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
+        //}
+        for (int i = 0; i < modelName.length; i++) {
             Entity entt = new Entity();
-            entt.pos = new Vector3f(
-                r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
-            entt.angleX = r.nextFloat(-180, 180);
-            entt.angleY = r.nextFloat(-180, 180);
-            entt.angleZ = r.nextFloat(-180, 180);
-            entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
+            entt.addComponent(k[i] = new Model(modelName[i],i * 5,0,0));
         }
-        new Entity().addComponent(new Model(new TextMash("lol", "arial").getMash(),0,0));
     }
     
     int Music = 0;
