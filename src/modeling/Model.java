@@ -20,6 +20,8 @@ public class Model extends Component{
     
     private float[] color = new float[]{1,1,1,1};
 
+    private float[] inctanceList = null;
+
     private float angleX;
     private float angleY;
     private float angleZ;
@@ -45,6 +47,11 @@ public class Model extends Component{
     } 
 
     public Model(Mash _mash,float x,float y,float z,Renderer renderer){
+        createFanc(_mash,x,y,z,renderer);
+    } 
+
+    public Model(Mash _mash,float x,float y,float z,Renderer renderer,float[] _inctanceList){
+        inctanceList = _inctanceList;
         createFanc(_mash,x,y,z,renderer);
     } 
 
@@ -144,5 +151,13 @@ public class Model extends Component{
 
     public float[] getColor(){
         return color;
+    }
+
+    public void setInctanceList(float[] list){
+        inctanceList = list;
+    }
+
+    public float[] getInctanceList(){
+        return inctanceList;
     }
 }

@@ -1,4 +1,24 @@
 package render;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glBufferSubData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
+import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 import static org.lwjgl.opengl.GL43.*;
 
 import java.nio.FloatBuffer;
@@ -68,7 +88,7 @@ public class RenderBatch {
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
         glBindVertexArray(vertexVboID);
 
-
+        if(models[0].getInctanceList() != null){instanceSize = models[0].getInctanceList().length;}
         float[] instancArray = new float[instanceSize];
         FloatBuffer instancBuffer = BufferUtils.createFloatBuffer(instancArray.length);
         instancBuffer.put(instancArray).flip();
@@ -122,6 +142,7 @@ public class RenderBatch {
 
         }
         else{
+
             int newVertexSize = 0;
             int newIcntceSize = 0;
             int breakPaint = 0;
@@ -152,17 +173,42 @@ public class RenderBatch {
 
             int newIcntceSizeBytes = newIcntceSize * Float.BYTES;
             offset = 0;
+            int vec4Size = 4 * Float.BYTES;
             glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
-            for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
-                glVertexAttribPointer(i, arrayStrcher[i] 
-                , GL_FLOAT, false,newIcntceSizeBytes, offset);
-                glEnableVertexAttribArray(i);
-                offset +=  arrayStrcher[i] * Float.BYTES;
-                instanceSize += arrayStrcher[i];
-            }
+            glEnableVertexAttribArray(4); 
+            glVertexAttribPointer(4, 4, GL_FLOAT, false, instanceSizeBytes, 0);
+            glEnableVertexAttribArray(5); 
+            glVertexAttribPointer(5, 4, GL_FLOAT, false, instanceSizeBytes, (1 * vec4Size));
+            glEnableVertexAttribArray(6); 
+            glVertexAttribPointer(6, 4, GL_FLOAT, false, instanceSizeBytes, (2 * vec4Size));
+            glEnableVertexAttribArray(7); 
+            glVertexAttribPointer(7, 4, GL_FLOAT, false, instanceSizeBytes, (3 * vec4Size));
+            glEnableVertexAttribArray(8); 
+            glVertexAttribPointer(8, 4, GL_FLOAT, false, instanceSizeBytes, (4 * vec4Size));
+
+            glVertexAttribDivisor(4, 1);
+            glVertexAttribDivisor(5, 1);
+            glVertexAttribDivisor(6, 1);
+            glVertexAttribDivisor(7, 1);
+            glVertexAttribDivisor(8, 1);
+
+            //glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
+//
+            //for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
+            //    glEnableVertexAttribArray(i - 1);
+            //    glVertexAttribPointer(i - 1, arrayStrcher[i] 
+            //    , GL_FLOAT, false,newIcntceSizeBytes, offset);
+            //    offset +=  arrayStrcher[i] * Float.BYTES;
+            //    instanceSize += arrayStrcher[i];
+            //}
+//
+            //for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
+            //    glVertexAttribDivisor(i - 1, 1);
+            //    System.out.println((i - 1) + ",");
+            //}
 
         }
-         int[] elementArray = new int[(int)(vertexArray.length/vertexSize)];
+        int[] elementArray = new int[(int)(vertexArray.length/vertexSize)];
         for (int i = 0; i < elementArray.length; i++) {
             elementArray[i] = i;
         }//זמני ביתר יש להשמיד
@@ -194,6 +240,10 @@ public class RenderBatch {
             instanceArray[i * instanceSize + 18] = models[i].getColor()[2];
             instanceArray[i * instanceSize + 19] = models[i].getColor()[3];
         }
+        reBufferInstance(instanceArray);
+    }
+
+    private void reBufferInstance(float[] instanceArray){
         glBindBuffer(GL_ARRAY_BUFFER, instancVboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0,instanceArray);
     }
@@ -226,8 +276,15 @@ public class RenderBatch {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         
+        if(models[0].getInctanceList() != null){
         glDrawElementsInstanced(theMash.getModelShapeNum(), 
-        theMash.getVertices().length/vertexSize, GL_UNSIGNED_INT, 0,models.length);
+        theMash.getVertices().length/vertexSize, GL_UNSIGNED_INT
+        , 0,models[0].getInctanceList().length/instanceSize);
+        }
+        else{
+            glDrawElementsInstanced(theMash.getModelShapeNum(), 
+            theMash.getVertices().length/vertexSize, GL_UNSIGNED_INT, 0,models.length);
+        }
 
         //glDrawArrays(model.getModelShapeNum()
         //,0,theMash.getVertices().length/vertexSize);
@@ -244,7 +301,14 @@ public class RenderBatch {
         }
         RIHInformationToGPU();
         s.uploadMat4f("uView",c.getViewMatrix());
-        reBufferInstance();
+
+        if(models[0].getInctanceList() != null){
+            reBufferInstance(models[0].getInctanceList());
+        }
+        else{
+            reBufferInstance();
+        }
+
         s.uploadMat4f("uProjection",
         c.getProjectionMarix());
         for (int i = 0; i < texsUseCount; i++) {
