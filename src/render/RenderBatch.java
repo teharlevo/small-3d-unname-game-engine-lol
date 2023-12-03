@@ -29,6 +29,9 @@ public class RenderBatch {
     private int vertexSize = 10;
     private final int vertexSizeBytes = vertexSize * Float.BYTES;
 
+    private int instanceSize = 20;
+    private final int instanceSizeBytes = instanceSize * Float.BYTES;
+
     private int texsUseCount = 0;
 
     private int[] texSlat = new int[]{0,1,2,3,4,5,6,7};
@@ -66,7 +69,7 @@ public class RenderBatch {
         glBindVertexArray(vertexVboID);
 
 
-        float[] instancArray = new float[20];
+        float[] instancArray = new float[instanceSize];
         FloatBuffer instancBuffer = BufferUtils.createFloatBuffer(instancArray.length);
         instancBuffer.put(instancArray).flip();
 
@@ -101,15 +104,15 @@ public class RenderBatch {
             int vec4Size = 4 * Float.BYTES;
             glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
             glEnableVertexAttribArray(4); 
-            glVertexAttribPointer(4, 4, GL_FLOAT, false, 5 * vec4Size, 0);
+            glVertexAttribPointer(4, 4, GL_FLOAT, false, instanceSizeBytes, 0);
             glEnableVertexAttribArray(5); 
-            glVertexAttribPointer(5, 4, GL_FLOAT, false, 5 * vec4Size, (1 * vec4Size));
+            glVertexAttribPointer(5, 4, GL_FLOAT, false, instanceSizeBytes, (1 * vec4Size));
             glEnableVertexAttribArray(6); 
-            glVertexAttribPointer(6, 4, GL_FLOAT, false, 5 * vec4Size, (2 * vec4Size));
+            glVertexAttribPointer(6, 4, GL_FLOAT, false, instanceSizeBytes, (2 * vec4Size));
             glEnableVertexAttribArray(7); 
-            glVertexAttribPointer(7, 4, GL_FLOAT, false, 5 * vec4Size, (3 * vec4Size));
+            glVertexAttribPointer(7, 4, GL_FLOAT, false, instanceSizeBytes, (3 * vec4Size));
             glEnableVertexAttribArray(8); 
-            glVertexAttribPointer(8, 4, GL_FLOAT, false, 5 * vec4Size, (4 * vec4Size));
+            glVertexAttribPointer(8, 4, GL_FLOAT, false, instanceSizeBytes, (4 * vec4Size));
 
             glVertexAttribDivisor(4, 1);
             glVertexAttribDivisor(5, 1);
@@ -120,19 +123,44 @@ public class RenderBatch {
         }
         else{
             int newVertexSize = 0;
+            int newIcntceSize = 0;
+            int breakPaint = 0;
             for (int i = 0; i < arrayStrcher.length; i++) {
                 newVertexSize += arrayStrcher[i];
+                if(arrayStrcher[i] == 0){
+                    breakPaint = i;
+                    break;
+                }
             }
+            for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
+                newIcntceSize += arrayStrcher[i];
+            }
+
             int newVertexSizeBytes = newVertexSize * Float.BYTES;
             int offset = 0;
             vertexSize = 0;
-            for (int i = 0; i < arrayStrcher.length; i++) {
+            glBindVertexArray(vaoID);
+            glBindBuffer(GL_ARRAY_BUFFER, vertexVboID);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertexArray);
+            for (int i = 0; i < breakPaint; i++) {
                 glVertexAttribPointer(i, arrayStrcher[i] 
                 , GL_FLOAT, false,newVertexSizeBytes, offset);
                 glEnableVertexAttribArray(i);
                 offset +=  arrayStrcher[i] * Float.BYTES;
                 vertexSize += arrayStrcher[i];
             }
+
+            int newIcntceSizeBytes = newIcntceSize * Float.BYTES;
+            offset = 0;
+            glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
+            for (int i = breakPaint + 1; i < arrayStrcher.length; i++) {
+                glVertexAttribPointer(i, arrayStrcher[i] 
+                , GL_FLOAT, false,newIcntceSizeBytes, offset);
+                glEnableVertexAttribArray(i);
+                offset +=  arrayStrcher[i] * Float.BYTES;
+                instanceSize += arrayStrcher[i];
+            }
+
         }
          int[] elementArray = new int[(int)(vertexArray.length/vertexSize)];
         for (int i = 0; i < elementArray.length; i++) {
@@ -154,17 +182,17 @@ public class RenderBatch {
     }
 
     private void reBufferInstance(){
-        float[] instanceArray = new float[models.length * 20];
+        float[] instanceArray = new float[models.length * instanceSize];
         float[] MiniInstanceArray = new float[16];
         for (int i = 0; i < models.length; i++) {
             models[i].getMatrix().get(MiniInstanceArray);
             for (int j = 0; j < MiniInstanceArray.length; j++) {
-                instanceArray[i * 20 + j] = MiniInstanceArray[j];
+                instanceArray[i * instanceSize + j] = MiniInstanceArray[j];
             }
-            instanceArray[i * 20 + 16] = models[i].getColor()[0];
-            instanceArray[i * 20 + 17] = models[i].getColor()[1];
-            instanceArray[i * 20 + 18] = models[i].getColor()[2];
-            instanceArray[i * 20 + 19] = models[i].getColor()[3];
+            instanceArray[i * instanceSize + 16] = models[i].getColor()[0];
+            instanceArray[i * instanceSize + 17] = models[i].getColor()[1];
+            instanceArray[i * instanceSize + 18] = models[i].getColor()[2];
+            instanceArray[i * instanceSize + 19] = models[i].getColor()[3];
         }
         glBindBuffer(GL_ARRAY_BUFFER, instancVboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0,instanceArray);
@@ -235,7 +263,7 @@ public class RenderBatch {
         newModels[newModels.length - 1] = m;
         models = newModels;
         
-        float[] instancArray = new float[20 * models.length];
+        float[] instancArray = new float[instanceSize * models.length];
         FloatBuffer instancBuffer = BufferUtils.createFloatBuffer(instancArray.length);
         instancBuffer.put(instancArray).flip();
 
