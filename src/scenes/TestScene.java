@@ -24,11 +24,12 @@ public class TestScene extends Scene{
         new Window(900,600,"test");
     }
 
-    Model k[] = new Model[1000];
+    Model k[] = new Model[2000];
     public void init() {
         Random r = new Random();
         float dis = 10;
         String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
+        //String[] modelName = new String[]{"mrkrab"};
         for (int i = 0; i < k.length; i++) {
             Entity entt = new Entity();
             entt.pos = new Vector3f(
@@ -36,7 +37,9 @@ public class TestScene extends Scene{
             entt.angleX = r.nextFloat(-180, 180);
             entt.angleY = r.nextFloat(-180, 180);
             entt.angleZ = r.nextFloat(-180, 180);
-            entt.addComponent(k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0));
+            k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
+            k[i].setColor(0,0,1,1);
+            entt.addComponent(k[i]);
         }
         //for (int i = 0; i < modelName.length; i++) {
         //    Entity entt = new Entity();

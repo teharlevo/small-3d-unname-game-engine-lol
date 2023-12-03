@@ -18,6 +18,7 @@ public class Model extends Component{
     private Mash mash;
     private Texture tex;
     
+    private float[] color = new float[]{1,1,1,1};
 
     private float angleX;
     private float angleY;
@@ -132,5 +133,16 @@ public class Model extends Component{
         matrix = matrix.scale(scale.x * object().scale.x ,scale.y * object().scale.y,scale.z * object().scale.z, matrix);
 		return matrix;
         //return createTransformationMatrix(pos.x,pos.y,pos.z,angleX,angleY,0,1,1,1);
+    }
+
+    public void setColor(float r,float g,float b,float a){
+        color[0] = r;
+        color[1] = g;
+        color[2] = b;
+        color[3] = a;
+    }
+
+    public float[] getColor(){
+        return color;
     }
 }

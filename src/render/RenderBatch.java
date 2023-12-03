@@ -66,7 +66,7 @@ public class RenderBatch {
         glBindVertexArray(vertexVboID);
 
 
-        float[] instancArray = new float[16];
+        float[] instancArray = new float[20];
         FloatBuffer instancBuffer = BufferUtils.createFloatBuffer(instancArray.length);
         instancBuffer.put(instancArray).flip();
 
@@ -108,13 +108,14 @@ public class RenderBatch {
             glVertexAttribPointer(6, 4, GL_FLOAT, false, 4 * vec4Size, (2 * vec4Size));
             glEnableVertexAttribArray(7); 
             glVertexAttribPointer(7, 4, GL_FLOAT, false, 4 * vec4Size, (3 * vec4Size));
-            //glEnableVertexAttribArray(8); 
-            //glVertexAttribPointer(8, 4, GL_FLOAT, false, 4 * vec4Size, (4 * vec4Size));
+            glEnableVertexAttribArray(8); 
+            glVertexAttribPointer(8, 4, GL_FLOAT, false, 4 * vec4Size, (4 * vec4Size));
 
             glVertexAttribDivisor(4, 1);
             glVertexAttribDivisor(5, 1);
             glVertexAttribDivisor(6, 1);
             glVertexAttribDivisor(7, 1);
+            glVertexAttribDivisor(8, 1);
         }
         else{
             int newVertexSize = 0;
@@ -152,13 +153,17 @@ public class RenderBatch {
     }
 
     private void reBufferInstance(){
-        float[] instanceArray = new float[models.length * 16];
+        float[] instanceArray = new float[models.length * 20];
         float[] MiniInstanceArray = new float[16];
         for (int i = 0; i < models.length; i++) {
             models[i].getMatrix().get(MiniInstanceArray);
             for (int j = 0; j < MiniInstanceArray.length; j++) {
-                instanceArray[i * 16 + j] = MiniInstanceArray[j];
+                instanceArray[i * 20 + j] = MiniInstanceArray[j];
             }
+            instanceArray[i * 20 + 16] = models[i].getColor()[0];
+            instanceArray[i * 20 + 17] = models[i].getColor()[1];
+            instanceArray[i * 20 + 18] = models[i].getColor()[2];
+            instanceArray[i * 20 + 19] = models[i].getColor()[3];
         }
         glBindBuffer(GL_ARRAY_BUFFER, instancVboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0,instanceArray);
