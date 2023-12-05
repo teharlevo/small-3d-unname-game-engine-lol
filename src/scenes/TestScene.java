@@ -13,6 +13,7 @@ import main.Scene;
 import main.Window;
 import modeling.Model;
 import modeling.ModelShape;
+import render.FrameBuffer;
 import render.Renderer;
 
 public class TestScene extends Scene{
@@ -155,6 +156,14 @@ public class TestScene extends Scene{
             for (int i = 0; i < k.length; i++) {
                 k[i].getMash().setModelShape(ModelShape.triangles);
             }
+        }
+
+        if(Input.getKeyPress("m")){
+            FrameBuffer fb = new FrameBuffer(Window.width(), Window.height());
+            fb.bind();
+            render();
+            fb.unbind();
+            fb.getTexturex().saveImage("ScreenShot" + new Random().nextInt(9999999));
         }
     }
 }
