@@ -34,47 +34,25 @@ public class ModelLoader {
     }
 
     private float[] processMesh(AIMesh mesh){
-
         AIVector3D.Buffer vectors = mesh.mVertices();
         AIVector3D.Buffer cordes = mesh.mTextureCoords(0);
-        AIColor4D.Buffer colors = mesh.mColors(0);
+        AIVector3D.Buffer Normals = mesh.mNormals();
 
-        float[] vertices = new float[vectors.limit() * 10];
+        float[] vertices = new float[vectors.limit() * 8];
 
-        if(colors != null){
-            for (int i = 0; i < vectors.limit(); i++) {
-                int offset = i * 10;
-                AIVector3D vector = vectors.get(i);
-                AIVector3D corde  = cordes.get(i);
-                AIColor4D  color  = colors.get(i);
-                vertices[offset]    = vector.x();
-                vertices[offset+1]  = vector.y();
-                vertices[offset+2]  = vector.z();
-                vertices[offset+3]  =  color.r();
-                vertices[offset+4]  =  color.g();
-                vertices[offset+5]  =  color.b();
-                vertices[offset+6]  =  color.a();
-                vertices[offset+7]  =  corde.x();
-                vertices[offset+8]  =  corde.y();
-                vertices[offset+9]  =  -1;
-            }
-        }
-        else{
-            for (int i = 0; i < vectors.limit(); i++) {
-                int offset = i * 10;
-                AIVector3D vector = vectors.get(i);
-                AIVector3D corde  = cordes.get(i);
-                vertices[offset]    = vector.x();
-                vertices[offset+1]  = vector.y();
-                vertices[offset+2]  = vector.z();
-                vertices[offset+3]  =  1.0f;
-                vertices[offset+4]  =  1.0f;
-                vertices[offset+5]  =  1.0f;
-                vertices[offset+6]  =  1.0f;
-                vertices[offset+7]  =  corde.x();
-                vertices[offset+8]  =  corde.y();
-                vertices[offset+9]  =  0.0f;
-            }
+        for (int i = 0; i < vectors.limit(); i++) {
+            int offset = i * 8;
+            AIVector3D vector = vectors.get(i);
+            AIVector3D corde  = cordes.get(i);
+            AIVector3D normal  = Normals.get(i);
+            vertices[offset]    = vector.x();
+            vertices[offset+1]  = vector.y();
+            vertices[offset+2]  = vector.z();
+            vertices[offset+3]  = normal.x();
+            vertices[offset+4]  = normal.y();
+            vertices[offset+5]  = normal.z();
+            vertices[offset+6]  = corde.x();
+            vertices[offset+7]  = corde.y();
         }
         
         return vertices;

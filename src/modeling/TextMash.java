@@ -36,19 +36,17 @@ public class TextMash {
             if(text.charAt(i) != '\n'){
                 float[] charCords = font.charCoreds(text.charAt(i));
                 for (int j = 0; j < 6; j++) {
-                int offset = i * 60 + j * 10;
+                int offset = i * 8 * 6 + j * 8;
                 float Xoffset = charCords[4];
                 float Yoffset = charCords[5];
                 verties[offset    ] = poscords[j*2] *     charCords[2] + addx;
                 verties[offset + 1] = poscords[j*2 + 1] * charCords[3] + addy;
                 verties[offset + 2] =  0;
-                verties[offset + 3] =  1.0f;
-                verties[offset + 4] =  1.0f;
+                verties[offset + 3] =  0.0f;
+                verties[offset + 4] =  0.0f;
                 verties[offset + 5] =  1.0f;
-                verties[offset + 6] =  1.0f;
-                verties[offset + 7] = charCords[0] +  uvcords[j*2] *     charCords[2];
-                verties[offset + 8] = charCords[1] +  uvcords[j*2 + 1] * charCords[3];
-                verties[offset + 9] = 0;
+                verties[offset + 6] = charCords[0] +  uvcords[j*2] *     charCords[2];
+                verties[offset + 7] = charCords[1] +  uvcords[j*2 + 1] * charCords[3];
                 }
                 addx += charCords[6];
             }

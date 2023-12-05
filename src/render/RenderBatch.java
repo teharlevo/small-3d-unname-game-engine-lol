@@ -38,15 +38,13 @@ public class RenderBatch {
     private Mash theMash;
 
     private final int posSize = 3;
-    private final int colorSize = 4;
+    private final int normalSize = 3;
     private final int UVSize = 2;
-    private final int texIDSize = 1;
 
     private final int posOffset = 0;
-    private final int colorOffset = posOffset + posSize * Float.BYTES;
-    private final int UVOffset = colorOffset + colorSize * Float.BYTES;
-    private final int texOffset = UVOffset + UVSize * Float.BYTES;
-    private int vertexSize = 10;
+    private final int normalOffset = posOffset + posSize * Float.BYTES;
+    private final int UVOffset = normalOffset + normalSize * Float.BYTES;
+    private int vertexSize = 8;
     private final int vertexSizeBytes = vertexSize * Float.BYTES;
 
     private int instanceSize = 20;
@@ -109,36 +107,30 @@ public class RenderBatch {
             glVertexAttribPointer(0, posSize, GL_FLOAT, false, vertexSizeBytes, posOffset);
             glEnableVertexAttribArray(0);
 
-            glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, colorOffset);
+            glVertexAttribPointer(1, normalSize, GL_FLOAT, false, vertexSizeBytes,normalOffset);
             glEnableVertexAttribArray(1);
 
             glVertexAttribPointer(2, UVSize, GL_FLOAT, false, vertexSizeBytes, UVOffset);
             glEnableVertexAttribArray(2);
 
-            glVertexAttribPointer(3, texIDSize, GL_FLOAT, false, vertexSizeBytes, texOffset);
-            glEnableVertexAttribArray(3);
-            
-            //glBindVertexArray(vboID);
-            //glVertexAttribPointer(0,UVSize, GL_FLOAT, false,UVSize * Float.BYTES, 0);
-            //glEnableVertexAttribArray(0);
             int vec4Size = 4 * Float.BYTES;
             glBindBuffer(GL_ARRAY_BUFFER,instancVboID);
+            glEnableVertexAttribArray(3); 
+            glVertexAttribPointer(3, 4, GL_FLOAT, false, instanceSizeBytes, 0);
             glEnableVertexAttribArray(4); 
-            glVertexAttribPointer(4, 4, GL_FLOAT, false, instanceSizeBytes, 0);
+            glVertexAttribPointer(4, 4, GL_FLOAT, false, instanceSizeBytes, (1 * vec4Size));
             glEnableVertexAttribArray(5); 
-            glVertexAttribPointer(5, 4, GL_FLOAT, false, instanceSizeBytes, (1 * vec4Size));
+            glVertexAttribPointer(5, 4, GL_FLOAT, false, instanceSizeBytes, (2 * vec4Size));
             glEnableVertexAttribArray(6); 
-            glVertexAttribPointer(6, 4, GL_FLOAT, false, instanceSizeBytes, (2 * vec4Size));
+            glVertexAttribPointer(6, 4, GL_FLOAT, false, instanceSizeBytes, (3 * vec4Size));
             glEnableVertexAttribArray(7); 
-            glVertexAttribPointer(7, 4, GL_FLOAT, false, instanceSizeBytes, (3 * vec4Size));
-            glEnableVertexAttribArray(8); 
-            glVertexAttribPointer(8, 4, GL_FLOAT, false, instanceSizeBytes, (4 * vec4Size));
+            glVertexAttribPointer(7, 4, GL_FLOAT, false, instanceSizeBytes, (4 * vec4Size));
 
+            glVertexAttribDivisor(3, 1);
             glVertexAttribDivisor(4, 1);
             glVertexAttribDivisor(5, 1);
             glVertexAttribDivisor(6, 1);
             glVertexAttribDivisor(7, 1);
-            glVertexAttribDivisor(8, 1);
 
         }
         else{

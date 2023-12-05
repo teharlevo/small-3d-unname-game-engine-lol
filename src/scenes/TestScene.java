@@ -11,10 +11,8 @@ import _2DPhysics.Physics2D;
 import main.Input;
 import main.Scene;
 import main.Window;
-import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
-import modeling.TextMash;
 import render.Renderer;
 
 public class TestScene extends Scene{
@@ -26,34 +24,34 @@ public class TestScene extends Scene{
         new Window(900,600,"test");
     }
 
-    Model k[] = new Model[2000];
+    Model k[] = new Model[500];
     Renderer g;
     public void init() {
         Random r = new Random();
         float dis = 10;
-        String[] modelName = new String[]{"bob","bus","mrkrab","pat","sandy"};
+        String[] modelName = new String[]{"bob"};
         //String[] modelName = new String[]{"mrkrab"};
-        //for (int i = 0; i < k.length; i++) {
-        //    Entity entt = new Entity();
-        //    entt.pos = new Vector3f(
-        //        r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
-        //    entt.angleX = r.nextFloat(-180, 180);
-        //    entt.angleY = r.nextFloat(-180, 180);
-        //    entt.angleZ = r.nextFloat(-180, 180);
-        //    k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
-        //    k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
-        //    entt.addComponent(k[i]);
-        //}
+        for (int i = 0; i < k.length; i++) {
+            Entity entt = new Entity();
+            entt.pos = new Vector3f(
+                r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
+            entt.angleX = r.nextFloat(-180, 180);
+            entt.angleY = r.nextFloat(-180, 180);
+            entt.angleZ = r.nextFloat(-180, 180);
+            k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
+            k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
+            entt.addComponent(k[i]);
+        }
         //for (int i = 0; i < modelName.length; i++) {
         //    Entity entt = new Entity();
         //    entt.addComponent(k[i] = new Model(modelName[i],i * 5,0,0));
         //}
-        g =new Renderer("testShit", cam, new int[]{3,4,2,1,0,3});
-        float [] p = new float[]{0,0,-2,1,1,1};
-        System.out.println(p.length);
-        Model j =new Model(new Mash("4"), 0,0,-1,g,p);
-        j.setAngle(30, 30,30);
-        new Entity().addComponent(j);
+        //g =new Renderer("testShit", cam, new int[]{3,4,2,1,0,3});
+        //float [] p = new float[]{0,0,-2,1,1,1};
+        //System.out.println(p.length);
+        //Model j =new Model(new Mash("4"), 0,0,-1,g,p);
+        //j.setAngle(30, 30,30);
+        //new Entity().addComponent(j);
     }
     
     int Music = 0;
@@ -62,7 +60,7 @@ public class TestScene extends Scene{
 
     public void update(float dt) {
         render();
-        g.render();
+        //g.render();
         float x = 0;
         float y = 0;
         
