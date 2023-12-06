@@ -11,6 +11,7 @@ import _2DPhysics.Physics2D;
 import main.Input;
 import main.Scene;
 import main.Window;
+import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
 import render.FrameBuffer;
@@ -32,27 +33,19 @@ public class TestScene extends Scene{
         float dis = 10;
         String[] modelName = new String[]{"bob"};
         //String[] modelName = new String[]{"mrkrab"};
-        for (int i = 0; i < k.length; i++) {
-            Entity entt = new Entity();
-            entt.pos = new Vector3f(
-                r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
-            entt.angleX = r.nextFloat(-180, 180);
-            entt.angleY = r.nextFloat(-180, 180);
-            entt.angleZ = r.nextFloat(-180, 180);
-            k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
-            k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
-            entt.addComponent(k[i]);
-        }
-        //for (int i = 0; i < modelName.length; i++) {
+        //for (int i = 0; i < k.length; i++) {
         //    Entity entt = new Entity();
-        //    entt.addComponent(k[i] = new Model(modelName[i],i * 5,0,0));
+        //    entt.pos = new Vector3f(
+        //        r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
+        //    entt.angleX = r.nextFloat(-180, 180);
+        //    entt.angleY = r.nextFloat(-180, 180);
+        //    entt.angleZ = r.nextFloat(-180, 180);
+        //    k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
+        //    k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
+        //    entt.addComponent(k[i]);
         //}
-        //g =new Renderer("testShit", cam, new int[]{3,4,2,1,0,3});
-        //float [] p = new float[]{0,0,-2,1,1,1};
-        //System.out.println(p.length);
-        //Model j =new Model(new Mash("4"), 0,0,-1,g,p);
-        //j.setAngle(30, 30,30);
-        //new Entity().addComponent(j);
+        Entity entt = new Entity();
+        entt.addComponent(new Model(new Mash("4"),0,0,0));
     }
     
     int Music = 0;
