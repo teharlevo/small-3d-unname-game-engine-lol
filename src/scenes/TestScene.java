@@ -22,7 +22,7 @@ public class TestScene extends Scene{
         Window.scenes = new Scene[1];
         Physics2D.setGrvity(0, 10);
         Window.scenes[0] = new TestScene();
-        new Window(900,600,"test");
+        new Window(900,600,"test",true);
     }
 
     Model k[] = new Model[500];
@@ -163,7 +163,7 @@ public class TestScene extends Scene{
             fb.bind();
             render();
             fb.unbind();
-            fb.getTexturex().saveImage("ScreenShot" + new Random().nextInt(9999999));
+            fb.getTexturex().saveImage("ScreenShot" + new Random().nextInt(9999999),"jpg");
         }
     }
 }

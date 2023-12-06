@@ -181,14 +181,12 @@ public class Texture {
         return buffer;
     }
     
-    public void saveImage(String name) {// איטי רצח יש לשפר
+    public void saveImage(String name,String formet) {// איטי רצח יש לשפר
 
         //יצרת באיטבאפר מהאקסטאראידי בלבד
 
         ByteBuffer buffer = getTextureData();
         //לקיחת באיטבאפרולשמור אותו לקובץ
-        String formet ="jpg";
-        if(channels == 4){formet ="png";}
         File file = new File(name + "." + formet); // The file to save to.
         BufferedImage image;
         if(channels == 3){
@@ -197,15 +195,17 @@ public class Texture {
         else{
             image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         }
-           
+        
+        byte[] data = new byte[width * height * channels];
+        buffer.get(data);
         for(int x = 0; x < width; x++)
         {
             for(int y = 0; y < height; y++)
             {
                 int i = (x + (width * y)) * channels;
-                int r = buffer.get(i) & 0xFF;
-                int g = buffer.get(i + 1) & 0xFF;
-                int b = buffer.get(i + 2) & 0xFF;
+                int r = data[i] & 0xFF;
+                int g = data[i + 1] & 0xFF;
+                int b = data[i + 2] & 0xFF;
                 image.setRGB(x, height - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
             }
         }

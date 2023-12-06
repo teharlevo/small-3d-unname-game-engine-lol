@@ -14,17 +14,6 @@ import _2DPhysics.Physics2D;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.GL_ONE;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL43.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -52,23 +41,30 @@ public class Window {
     private static String title;
 
     private static float time = 0;
-    
+    private static boolean working = true;
 
     public Window(String _title){
         title = _title;
-        init(true,1920,1080);
+        init(true,1920,1080,true);
         gameLoop();
         freeMemory();
     }
 
     public Window(int _width,int _height,String _title){
         title = _title;
-        init(false,_width,_height);
+        init(false,_width,_height,true);
         gameLoop();
         freeMemory();
     }
 
-    private void init(boolean fullScreen,int _width,int _height){
+    public Window(int _width,int _height,String _title,boolean showWindow){
+        title = _title;
+        init(false,_width,_height,showWindow);
+        gameLoop();
+        freeMemory();
+    }
+
+    private void init(boolean fullScreen,int _width,int _height,boolean showWindow){
         
         width = _width;
         height = _height;
@@ -82,7 +78,7 @@ public class Window {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_VISIBLE, showWindow? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         if(fullScreen){
             glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
@@ -99,7 +95,6 @@ public class Window {
         
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
-        glfwShowWindow(window);
 
         String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
         long audioDevice = alcOpenDevice(defaultDeviceName);
@@ -131,10 +126,11 @@ public class Window {
     private void gameLoop(){
         float endframe;
         float stertframe = (float)glfwGetTime();
-        while (!glfwWindowShouldClose(window)){
+        while (working){
 
             glfwPollEvents();
             glfwSwapBuffers(window);
+            working = !glfwWindowShouldClose(window);
 
             glClearColor(0.0f, 0.0f, 0.3f, 1.0f );
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -194,6 +190,10 @@ public class Window {
 
     public static Scene getCurrentScene(){
         return currentScene;
+    }
+
+    public static void stop(){
+        working = false;
     }
 
     public static int width(){
