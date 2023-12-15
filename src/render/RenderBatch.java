@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL43.*;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
 import modeling.Mash;
@@ -33,6 +34,8 @@ public class RenderBatch {
     private int texsUseCount = 0;
 
     private int[] texSlat = new int[]{0,1,2,3,4,5,6,7};
+
+    public static float lightX,lightY,lightZ;
 
     public RenderBatch(Shader shader,Model _model,RenderrInformationHolder _RIH,int[] arrayStrcher){
         s = shader;
@@ -264,7 +267,7 @@ public class RenderBatch {
         s.uploadMat4f("uProjection",
         c.getProjectionMarix());
         s.uploadVec3f("lightpos",
-        c.getPos());
+        lightX,lightY,lightZ);
         for (int i = 0; i < texsUseCount; i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             texUseThisFrame[i].bind();

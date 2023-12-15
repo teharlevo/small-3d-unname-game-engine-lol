@@ -3,7 +3,6 @@ package modeling;
 import java.io.File;
 
 import org.lwjgl.PointerBuffer;
-import org.lwjgl.assimp.AIColor4D;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIVector3D;

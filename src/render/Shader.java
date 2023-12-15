@@ -173,6 +173,25 @@ public class Shader {
         use();
         glUniform4f(varLocation, vec.x, vec.y, vec.z, vec.w);
     }
+
+    public void uploadVec2f(String varName,float x,float y) {
+        int varLocation = glGetUniformLocation(SP, varName);
+        use();
+        glUniform2f(varLocation, x,y);
+    }
+
+    public void uploadVec3f(String varName,float x,float y,float z) {
+        int varLocation = glGetUniformLocation(SP, varName);
+        use();
+        glUniform3f(varLocation, x,y,z);
+    }
+
+    public void uploadVec4f(String varName,float x,float y,float z,float w) {
+        int varLocation = glGetUniformLocation(SP, varName);
+        use();
+        glUniform4f(varLocation, x,y,z,w);
+    }
+    
     public void uploadMat4f(String varName, Matrix4f mat4) {
         int varLocation = glGetUniformLocation(SP, varName);
         use();

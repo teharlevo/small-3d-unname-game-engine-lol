@@ -13,6 +13,7 @@ import main.Window;
 import modeling.Model;
 import modeling.ModelShape;
 import render.FrameBuffer;
+import render.RenderBatch;
 import render.Renderer;
 
 public class TestScene extends Scene{
@@ -24,6 +25,7 @@ public class TestScene extends Scene{
     }
 
     Model k[] = new Model[500];
+    Model colorModel;
     Renderer g;
     public void init() {
         Random r = new Random();
@@ -37,9 +39,12 @@ public class TestScene extends Scene{
             entt.angleY = r.nextFloat(-180, 180);
             entt.angleZ = r.nextFloat(-180, 180);
             k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
-            k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
+            k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),1);
             entt.addComponent(k[i]);
         }
+        colorModel = new Model(modelName[r.nextInt(modelName.length)],0,0,0); 
+        Entity entt = new Entity();
+        entt.addComponent(colorModel);
     }
     
     int Music = 0;
@@ -152,5 +157,19 @@ public class TestScene extends Scene{
             fb.unbind();
             fb.getTexturex().saveImage("ScreenShot" + new Random().nextInt(9999999),"jpg");
         }
+
+        if(Input.getKeyPress("right")){
+            RenderBatch.lightX += dt;
+        }
+        if(Input.getKeyPress("left")){
+            RenderBatch.lightX -= dt;
+        }
+        if(Input.getKeyPress("up")){
+            RenderBatch.lightY += dt;
+        }
+        if(Input.getKeyPress("down")){
+            RenderBatch.lightY -= dt;
+        }
+        colorModel.setPos(RenderBatch.lightX, RenderBatch.lightY,RenderBatch.lightZ);
     }
 }
