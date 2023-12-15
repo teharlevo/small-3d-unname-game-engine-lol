@@ -7,7 +7,6 @@ import main.Entity;
 import org.joml.Vector3f;
 
 import Sound.SoundMaster;
-import _2DPhysics.Physics2D;
 import main.Input;
 import main.Scene;
 import main.Window;
@@ -21,7 +20,6 @@ public class TestScene extends Scene{
 
     public static void main(String[] args){
         Window.scenes = new Scene[1];
-        Physics2D.setGrvity(0, 10);
         Window.scenes[0] = new TestScene();
         new Window(900,600,"test",true);
     }
@@ -32,20 +30,20 @@ public class TestScene extends Scene{
         Random r = new Random();
         float dis = 10;
         String[] modelName = new String[]{"bob"};
-        //String[] modelName = new String[]{"mrkrab"};
-        //for (int i = 0; i < k.length; i++) {
-        //    Entity entt = new Entity();
-        //    entt.pos = new Vector3f(
-        //        r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
-        //    entt.angleX = r.nextFloat(-180, 180);
-        //    entt.angleY = r.nextFloat(-180, 180);
-        //    entt.angleZ = r.nextFloat(-180, 180);
-        //    k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
-        //    k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
-        //    entt.addComponent(k[i]);
-        //}
-        Entity entt = new Entity();
-        entt.addComponent(new Model(new Mash("4"),0,0,0));
+        for (int i = 0; i < k.length; i++) {
+            Entity entt = new Entity();
+            entt.pos = new Vector3f(
+                r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
+            entt.angleX = r.nextFloat(-180, 180);
+            entt.angleY = r.nextFloat(-180, 180);
+            entt.angleZ = r.nextFloat(-180, 180);
+            k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
+            k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
+            entt.addComponent(k[i]);
+        }
+        Entity enttt = new Entity();
+        Model m = new Model(new Mash("4"),0,0,0);
+        enttt.addComponent(m);
     }
     
     int Music = 0;

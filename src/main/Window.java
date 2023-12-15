@@ -10,7 +10,6 @@ import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
 
 import Sound.SoundMaster;
-import _2DPhysics.Physics2D;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -164,7 +163,6 @@ public class Window {
             gameObjects.get(i).update(dt);
         }
         
-        Physics2D.update(dt);
         SoundMaster.update();
 
         currentScene.update(dt);
@@ -172,7 +170,6 @@ public class Window {
     }
 
     public static void changeScene(int newScene){
-        Physics2D.reset();
         gameObjects = new ArrayList<>();
         if(newScene > -1 && newScene < scenes.length){
             try {

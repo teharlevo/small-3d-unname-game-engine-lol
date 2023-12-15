@@ -40,6 +40,8 @@ public class Mash {
         -width,  height,  0.0f, 0.0f,0.0f,1.0f,  0.0f, 1.0f,
         -width, -height,  0.0f, 0.0f,0.0f,1.0f,  0.0f, 0.0f,}; 
         textuere = tex;
+        mashID = mashNum;
+        mashNum ++;
     }
 
     public Mash(String str){
@@ -53,6 +55,8 @@ public class Mash {
          width,  height,  0.0f, 0.0f,0.0f,1.0f,  1.0f, 1.0f,
         -width,  height,  0.0f, 0.0f,0.0f,1.0f,  0.0f, 1.0f,
         -width, -height,  0.0f, 0.0f,0.0f,1.0f,  0.0f, 0.0f,}; 
+        mashID = mashNum;
+        mashNum ++;
     }
    
     public void setVertices(float[] newVertices){
