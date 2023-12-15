@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
@@ -155,18 +156,23 @@ public class Shader {
         isuse = false;
     }
 
-    public void uploadVec4f(String varName, Vector4f vec) {
-        int varLocation = glGetUniformLocation(SP, varName);
-        use();
-        glUniform4f(varLocation, vec.x, vec.y, vec.z, vec.w);
-    }
-
     public void uploadVec2f(String varName, Vector2f vec) {
         int varLocation = glGetUniformLocation(SP, varName);
         use();
         glUniform2f(varLocation, vec.x, vec.y);
     }
 
+    public void uploadVec3f(String varName, Vector3f vec) {
+        int varLocation = glGetUniformLocation(SP, varName);
+        use();
+        glUniform3f(varLocation, vec.x, vec.y, vec.z);
+    }
+
+    public void uploadVec4f(String varName, Vector4f vec) {
+        int varLocation = glGetUniformLocation(SP, varName);
+        use();
+        glUniform4f(varLocation, vec.x, vec.y, vec.z, vec.w);
+    }
     public void uploadMat4f(String varName, Matrix4f mat4) {
         int varLocation = glGetUniformLocation(SP, varName);
         use();

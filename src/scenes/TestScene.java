@@ -10,7 +10,6 @@ import Sound.SoundMaster;
 import main.Input;
 import main.Scene;
 import main.Window;
-import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
 import render.FrameBuffer;
@@ -41,9 +40,6 @@ public class TestScene extends Scene{
             k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
             entt.addComponent(k[i]);
         }
-        Entity enttt = new Entity();
-        Model m = new Model(new Mash("4"),0,0,0);
-        enttt.addComponent(m);
     }
     
     int Music = 0;

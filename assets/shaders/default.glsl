@@ -8,6 +8,7 @@ layout (location=7) in vec4 aModelColor;
 
 uniform mat4 uView;
 uniform mat4 uProjection;
+uniform vec3 lightpos;
 
 out vec4 fColor;
 out vec2 fTexCoords;
@@ -17,7 +18,7 @@ void main()
     fColor = aModelColor;
     //fColor = aColor;
     fTexCoords = aTexCoords;
-    gl_Position = uProjection * uView * aModel * vec4(aPos, 1.0);
+    gl_Position = uProjection * uView * aModel * vec4(aPos + lightpos, 1.0);
 }
 
 #type fragment
@@ -31,6 +32,8 @@ in vec2 fTexCoords;
 out vec4 color;
 
 void main()
-{
+{  
+    float ambientStrength = 1;
     color = fColor * texture(uTex_Sampler[0], vec2(fTexCoords.x,fTexCoords.y ));
+    color = vec4(vec3(color) * ambientStrength,color.a);
 }

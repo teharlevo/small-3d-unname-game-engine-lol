@@ -263,6 +263,8 @@ public class RenderBatch {
 
         s.uploadMat4f("uProjection",
         c.getProjectionMarix());
+        s.uploadVec3f("lightpos",
+        c.getPos());
         for (int i = 0; i < texsUseCount; i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             texUseThisFrame[i].bind();
