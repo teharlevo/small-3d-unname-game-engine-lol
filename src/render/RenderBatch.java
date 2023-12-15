@@ -266,6 +266,8 @@ public class RenderBatch {
 
         s.uploadMat4f("uProjection",
         c.getProjectionMarix());
+        s.uploadVec3f("viewPos",
+        c.getPos());
         s.uploadVec3f("lightpos",
         lightX,lightY,lightZ);
         for (int i = 0; i < texsUseCount; i++) {

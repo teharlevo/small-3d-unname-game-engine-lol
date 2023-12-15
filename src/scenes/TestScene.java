@@ -159,16 +159,22 @@ public class TestScene extends Scene{
         }
 
         if(Input.getKeyPress("right")){
-            RenderBatch.lightX += dt;
+            RenderBatch.lightX += dt * 2;
         }
         if(Input.getKeyPress("left")){
-            RenderBatch.lightX -= dt;
+            RenderBatch.lightX -= dt * 2;
         }
         if(Input.getKeyPress("up")){
-            RenderBatch.lightY += dt;
+            RenderBatch.lightY += dt * 2;
         }
         if(Input.getKeyPress("down")){
-            RenderBatch.lightY -= dt;
+            RenderBatch.lightY -= dt * 2;
+        }
+        if(Input.getKeyPress("1")){
+            RenderBatch.lightZ += dt * 2;
+        }
+        if(Input.getKeyPress("2")){
+            RenderBatch.lightZ -= dt * 2;
         }
         colorModel.setPos(RenderBatch.lightX, RenderBatch.lightY,RenderBatch.lightZ);
     }
