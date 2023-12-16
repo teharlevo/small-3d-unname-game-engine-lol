@@ -26,9 +26,24 @@ void main()
 #type fragment
 #version 430 core
 
-uniform sampler2D[8] uTex_Sampler;
-uniform vec3 lightpos;
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+}; 
+
+struct Light {
+    vec3 position;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+}
+
+uniform sampler2D[1] uTex_Sampler;
 uniform vec3 viewPos; 
+uniform Material material;
+uniform Light light;
 
 in vec4 fColor;
 in vec2 fTexCoords;
@@ -38,21 +53,21 @@ in vec3 fPos;
 out vec4 color;
 
 void main()
-{  
-    float ambientStrength = 0.1;
-    float specularStrength = 0.5;
+{
+
+    vec3 ambient = material.ambient;
 
     vec3 norm = normalize(fNormal);
     vec3 lightDir = normalize(lightpos - fPos);  
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * vec3(1);
+    vec3 diffuse = diff * material.diffuse;
     color = fColor * texture(uTex_Sampler[0], vec2(fTexCoords.x,fTexCoords.y ));
 
     vec3 viewDir = normalize(viewPos - fPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = specularStrength * spec * vec3(1); 
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    vec3 specular = spec * material.specular; 
 
-    vec3 result = (vec3(ambientStrength)+ diffuse + specular) * vec3(color);
+    vec3 result = (ambient + diffuse + specular) * vec3(color);
     color = vec4(result,color.a);
 }

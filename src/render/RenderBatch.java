@@ -270,6 +270,7 @@ public class RenderBatch {
         c.getPos());
         s.uploadVec3f("lightpos",
         lightX,lightY,lightZ);
+        theMash.getMaterial().sandToGPU(s);
         for (int i = 0; i < texsUseCount; i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             texUseThisFrame[i].bind();

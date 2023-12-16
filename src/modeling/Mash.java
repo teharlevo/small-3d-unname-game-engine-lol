@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
 import main.Assets;
 import main.Window;
+import modeling.light.Material;
 import render.Texture;
 
 public class Mash {
@@ -14,19 +15,22 @@ public class Mash {
     private ModelShape mp = ModelShape.triangles;
     private int mashID;
     static private int mashNum;
+    private Material material;
 
-    public Mash(float[] mashVertices,Texture tex){
+    public Mash(float[] mashVertices,Texture tex,Material _material){
         vertices = mashVertices; 
         textuere = tex;
         mashID = mashNum;
         mashNum ++;
+        material = _material;
     }
 
-    public Mash(float[] mashVertices,String str){
+    public Mash(float[] mashVertices,String str,Material _material){
         vertices = mashVertices; 
         textuere = Assets.getTexture(str);
         mashID = mashNum;
         mashNum ++;
+        material = _material;
     }
 
     public Mash(Texture tex){
@@ -87,6 +91,14 @@ public class Mash {
             return GL_TRIANGLES;
         }
         return 0;
+    }
+
+    public Material getMaterial(){
+        return material;
+    }
+
+    public void setMaterial(Material m){
+        material = m;
     }
 
     public int getMashID() {

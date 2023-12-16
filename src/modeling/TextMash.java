@@ -1,8 +1,11 @@
 package modeling;
 
+import org.joml.Vector3f;
+
 import fontPancking.FontLoader;
 import main.Assets;
 import main.Window;
+import modeling.light.Material;
 
 public class TextMash {
     private Mash mash;
@@ -12,13 +15,15 @@ public class TextMash {
     public TextMash(String _text,FontLoader _font){
         text = _text;
         font = _font;
-        mash = new Mash(makeVerties(text), font.getTexture());
+        mash = new Mash(makeVerties(text), font.getTexture(),new Material(
+            new Vector3f(1),new Vector3f(0),new Vector3f(0), 0));
     }
 
     public TextMash(String _text,String fontName){
         text = _text;
         font = Assets.getFontLoader(fontName);
-        mash = new Mash(makeVerties(text), font.getTexture());
+        mash = new Mash(makeVerties(text), font.getTexture(),new Material(
+            new Vector3f(1),new Vector3f(0),new Vector3f(0), 0));
     }
 
     public void cangeText(String _text){

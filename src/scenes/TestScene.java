@@ -10,6 +10,7 @@ import Sound.SoundMaster;
 import main.Input;
 import main.Scene;
 import main.Window;
+import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
 import render.FrameBuffer;
@@ -39,12 +40,14 @@ public class TestScene extends Scene{
             entt.angleY = r.nextFloat(-180, 180);
             entt.angleZ = r.nextFloat(-180, 180);
             k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
-            k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),1);
+            k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
             entt.addComponent(k[i]);
         }
         colorModel = new Model(modelName[r.nextInt(modelName.length)],0,0,0); 
         Entity entt = new Entity();
         entt.addComponent(colorModel);
+        //entt = new Entity();
+        //entt.addComponent(new Model(new Mash("4"),0,0,0) );
     }
     
     int Music = 0;
