@@ -34,11 +34,11 @@ struct Material {
 }; 
 
 struct Light {
-    vec3 position;
+    vec3 pos;
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-}
+};
 
 uniform sampler2D[1] uTex_Sampler;
 uniform vec3 viewPos; 
@@ -58,7 +58,7 @@ void main()
     vec3 ambient = material.ambient;
 
     vec3 norm = normalize(fNormal);
-    vec3 lightDir = normalize(lightpos - fPos);  
+    vec3 lightDir = normalize(light.pos - fPos);  
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * material.diffuse;
     color = fColor * texture(uTex_Sampler[0], vec2(fTexCoords.x,fTexCoords.y ));
@@ -68,6 +68,6 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = spec * material.specular; 
 
-    vec3 result = (ambient + diffuse + specular) * vec3(color);
+    vec3 result = (ambient + diffuse + specular) * color.xyz;
     color = vec4(result,color.a);
 }

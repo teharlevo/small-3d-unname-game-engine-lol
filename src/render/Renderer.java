@@ -5,6 +5,7 @@ import java.util.List;
 
 import main.Assets;
 import modeling.Model;
+import modeling.light.LightSource;
 
 public class Renderer {
     private RenderrInformationHolder RIH;
@@ -12,6 +13,7 @@ public class Renderer {
     private Shader s;
     private Camrea c;
     private int[] arrayStrcher = null;
+    private List<LightSource> lightSources = new ArrayList<>();
     
     public Renderer(Shader shader,Camrea camrea){
         s = shader;
@@ -46,7 +48,7 @@ public class Renderer {
                 return;
             }
         }
-        batchers.add(new RenderBatch(s, m,RIH,arrayStrcher));
+        batchers.add(new RenderBatch(s, m,this,arrayStrcher));
     }
 
     public void render(Camrea c){
@@ -72,6 +74,22 @@ public class Renderer {
 
     public RenderrInformationHolder getRIH(){
         return RIH;
+    }
+
+    public void addLightSource(LightSource newLightSource){
+        lightSources.add(newLightSource);
+    }
+
+    public LightSource[] getLightSources(){
+        LightSource lightSourcesArray[] = new LightSource[lightSources.size()];
+        lightSources.toArray(lightSourcesArray);
+        return lightSourcesArray;
+    }
+
+    public void activetedLightSources(){
+        for (int i = 0; i < lightSources.size(); i++) {
+            lightSources.get(i).sandToGPU(s);
+        }
     }
 
 }

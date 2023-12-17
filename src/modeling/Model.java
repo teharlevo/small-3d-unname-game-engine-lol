@@ -3,8 +3,6 @@ package modeling;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import static org.lwjgl.opengl.GL30.*;
-
 import main.Assets;
 import main.Component;
 import main.Window;
@@ -133,11 +131,12 @@ public class Model extends Component{
     public Matrix4f getMatrix(){
         Matrix4f matrix = new Matrix4f();
 		matrix.identity();
-        matrix =   matrix.translate(pos.x + object().pos.x ,pos.y + object().pos.y,pos.z + object().pos.z, matrix);
-        matrix = matrix.rotate((float) Math.toRadians(angleX + object().angleX), new Vector3f(1,0,0), matrix);
-        matrix = matrix.rotate((float) Math.toRadians(angleY + object().angleY), new Vector3f(0,1,0),matrix);
-        matrix = matrix.rotate((float) Math.toRadians(angleZ + object().angleZ), new Vector3f(0,0,1),matrix);
-        matrix = matrix.scale(scale.x * object().scale.x ,scale.y * object().scale.y,scale.z * object().scale.z, matrix);
+        matrix =   matrix.translate(pos.x + object().getPos().x ,pos.y + object().getPos().y,pos.z + object().getPos().z, matrix);
+        matrix = matrix.rotate((float) Math.toRadians(angleX + object().getAngle().x), new Vector3f(1,0,0), matrix);
+        matrix = matrix.rotate((float) Math.toRadians(angleY + object().getAngle().y), new Vector3f(0,1,0),matrix);
+        matrix = matrix.rotate((float) Math.toRadians(angleZ + object().getAngle().z), new Vector3f(0,0,1),matrix);
+        matrix = matrix.scale(scale.x * object().getScale().x 
+        ,scale.y * object().getScale().y,scale.z * object().getScale().z, matrix);
 		return matrix;
         //return createTransformationMatrix(pos.x,pos.y,pos.z,angleX,angleY,0,1,1,1);
     }

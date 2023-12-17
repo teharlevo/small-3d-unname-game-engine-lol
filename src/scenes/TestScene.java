@@ -13,8 +13,8 @@ import main.Window;
 import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
+import modeling.light.LightSource;
 import render.FrameBuffer;
-import render.RenderBatch;
 import render.Renderer;
 
 public class TestScene extends Scene{
@@ -26,7 +26,7 @@ public class TestScene extends Scene{
     }
 
     Model k[] = new Model[500];
-    Model colorModel;
+    Entity light;
     Renderer g;
     public void init() {
         Random r = new Random();
@@ -34,20 +34,21 @@ public class TestScene extends Scene{
         String[] modelName = new String[]{"bob"};
         for (int i = 0; i < k.length; i++) {
             Entity entt = new Entity();
-            entt.pos = new Vector3f(
+            entt.setPos(
                 r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
-            entt.angleX = r.nextFloat(-180, 180);
-            entt.angleY = r.nextFloat(-180, 180);
-            entt.angleZ = r.nextFloat(-180, 180);
+            entt.setAngle(r.nextFloat(-180, 180),r.nextFloat(-180, 180),r.nextFloat(-180, 180));
             k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
-            k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
+            //sk[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
             entt.addComponent(k[i]);
         }
-        colorModel = new Model(modelName[r.nextInt(modelName.length)],0,0,0); 
-        Entity entt = new Entity();
-        entt.addComponent(colorModel);
-        //entt = new Entity();
-        //entt.addComponent(new Model(new Mash("4"),0,0,0) );
+        Model colorModel = new Model(modelName[r.nextInt(modelName.length)],0,0,0); 
+        light = new Entity();
+        light.addComponent(colorModel);
+        LightSource lightSource = 
+        new LightSource(new Vector3f(0f),new Vector3f(0.1f),new Vector3f(0.5f),new Vector3f(0.5f),32);
+        getRenderer().addLightSource(lightSource);
+        
+        light.addComponent(lightSource);
     }
     
     int Music = 0;
@@ -161,24 +162,29 @@ public class TestScene extends Scene{
             fb.getTexturex().saveImage("ScreenShot" + new Random().nextInt(9999999),"jpg");
         }
 
+        float lx = light.getPos().x;
+        float ly = light.getPos().y;
+        float lz = light.getPos().z;
+        float lightSpeed = 2;
+
         if(Input.getKeyPress("right")){
-            RenderBatch.lightX += dt * 2;
+            lx += dt * lightSpeed;
         }
         if(Input.getKeyPress("left")){
-            RenderBatch.lightX -= dt * 2;
+            lx -= dt * lightSpeed;
         }
         if(Input.getKeyPress("up")){
-            RenderBatch.lightY += dt * 2;
+            ly += dt * lightSpeed;
         }
         if(Input.getKeyPress("down")){
-            RenderBatch.lightY -= dt * 2;
+            ly -= dt * lightSpeed;
         }
         if(Input.getKeyPress("1")){
-            RenderBatch.lightZ += dt * 2;
+            lz += dt * lightSpeed;
         }
         if(Input.getKeyPress("2")){
-            RenderBatch.lightZ -= dt * 2;
+            lz -= dt * lightSpeed;
         }
-        colorModel.setPos(RenderBatch.lightX, RenderBatch.lightY,RenderBatch.lightZ);
+        light.setPos(lx,ly,lz);
     }
 }

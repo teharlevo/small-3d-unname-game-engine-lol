@@ -1,10 +1,29 @@
 package render;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glBufferSubData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
+import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 import static org.lwjgl.opengl.GL43.*;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
 import modeling.Mash;
@@ -13,7 +32,7 @@ import modeling.Model;
 public class RenderBatch {
 
     private Model[] models;
-    private RenderrInformationHolder RIH;
+    private Renderer father;
     private Texture[] texUseThisFrame = new Texture[8];
 
     private Mash theMash;
@@ -35,11 +54,9 @@ public class RenderBatch {
 
     private int[] texSlat = new int[]{0,1,2,3,4,5,6,7};
 
-    public static float lightX,lightY,lightZ;
-
-    public RenderBatch(Shader shader,Model _model,RenderrInformationHolder _RIH,int[] arrayStrcher){
+    public RenderBatch(Shader shader,Model _model,Renderer _father,int[] arrayStrcher){
         s = shader;
-        RIH = _RIH;
+        father = _father;
         models = new Model[1];
         models[0] = _model;
         theMash = _model.getMash();
@@ -268,9 +285,9 @@ public class RenderBatch {
         c.getProjectionMarix());
         s.uploadVec3f("viewPos",
         c.getPos());
-        s.uploadVec3f("lightpos",
-        lightX,lightY,lightZ);
+        father.activetedLightSources();
         theMash.getMaterial().sandToGPU(s);
+    
         for (int i = 0; i < texsUseCount; i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             texUseThisFrame[i].bind();
@@ -299,20 +316,20 @@ public class RenderBatch {
 
     private void RIHInformationToGPU(){
 
-        for (int i = 0; i < RIH.getTexs().length; i++) {
+        for (int i = 0; i < father.getRIH().getTexs().length; i++) {
 
             if(texsUseCount < 8){
-                texUseThisFrame[texsUseCount] =  RIH.getTexs()[i];
+                texUseThisFrame[texsUseCount] =  father.getRIH().getTexs()[i];
                 texsUseCount ++;
             }
         }
         
-        for (int i = 0; i < RIH.getFloats().length; i++) {
-            s.uploadfloat(RIH.getFloatsNames()[i],RIH.getFloats()[i]);
+        for (int i = 0; i < father.getRIH().getFloats().length; i++) {
+            s.uploadfloat(father.getRIH().getFloatsNames()[i],father.getRIH().getFloats()[i]);
         }
 
-        for (int i = 0; i < RIH.getInts().length; i++) {
-            s.uploadInt(RIH.getIntsNames()[i], RIH.getInts()[i]);
+        for (int i = 0; i < father.getRIH().getInts().length; i++) {
+            s.uploadInt(father.getRIH().getIntsNames()[i], father.getRIH().getInts()[i]);
         }
     }
 
