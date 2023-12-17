@@ -1,8 +1,6 @@
 package modeling;
 
 import java.io.File;
-
-import org.joml.Vector3f;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
@@ -12,17 +10,15 @@ import org.lwjgl.assimp.AIMaterial;
 import org.lwjgl.assimp.AIMaterialProperty;
 
 import main.Assets;
-import modeling.light.Material;
 import render.Texture;
+import render.light.Material;
 
 public class ModelLoader {
 
-    private float vertices[];
+    private float vertices[] = new float[0];
     private Texture texture;
 
-    private Vector3f materialAmbient;
-    private Vector3f materialDiffuse;
-    private Vector3f materialSpecular;
+    private Texture specularTexture;
     private    float materialShininess;
     
     public ModelLoader(String path){
@@ -30,14 +26,28 @@ public class ModelLoader {
 
         PointerBuffer buffer = scene.mMeshes();
 
-        for (int i = 0; i < 1; i++) { //buffer.limit(); i++) {
-            AIMesh mesh = AIMesh.create(buffer.get(i));
-            vertices = processMesh(mesh);
+        for (int i = 0; i < buffer.limit(); i++) {
+            AIMesh mash = AIMesh.create(buffer.get(i));
+            float[] oldVertices = vertices;
+            float[] addedVertices =processMash(mash);
+
+            int fal = oldVertices.length;
+            int sal = addedVertices.length; 
+            vertices = new float[fal + sal];
+            System.arraycopy(oldVertices, 0, vertices, 0, fal);  
+            System.arraycopy(addedVertices, 0, vertices, fal, sal);  
         }
-        materialImporting(scene,0);
+        //materialImporting(scene,0);
         String texName = new File(path).getName();
         texName = texName.substring(0, texName.indexOf("."));
         texture = Assets.getTexture(texName);
+        String s = texName + "_specular";
+        if(Assets.getTexture(s) == null){
+            specularTexture = texture;
+        }
+        else{
+            specularTexture = Assets.getTexture(s);
+        }
          
     }
 
@@ -51,17 +61,14 @@ public class ModelLoader {
             AIMaterialProperty prop = AIMaterialProperty.create(properties.get(j));
         }
         material.close();
-        materialAmbient = new Vector3f(0.1f);
-        materialDiffuse = new Vector3f(0.5f);
-        materialSpecular = new Vector3f(0.5f);
-        materialShininess = 256;
+        materialShininess = 32;
 
     }
 
-    private float[] processMesh(AIMesh mesh){
-        AIVector3D.Buffer vectors = mesh.mVertices();
-        AIVector3D.Buffer cordes = mesh.mTextureCoords(0);
-        AIVector3D.Buffer Normals = mesh.mNormals();
+    private float[] processMash(AIMesh mash){
+        AIVector3D.Buffer vectors = mash.mVertices();
+        AIVector3D.Buffer cordes = mash.mTextureCoords(0);
+        AIVector3D.Buffer Normals = mash.mNormals();
 
         float[] vertices = new float[vectors.limit() * 8];
 
@@ -79,13 +86,12 @@ public class ModelLoader {
             vertices[offset+6]  = corde.x();
             vertices[offset+7]  = corde.y();
         }
-        mesh.close();
+        mash.close();
         return vertices;
     }
 
     public Mash getMash(){
-        return new Mash(vertices,texture,new Material(materialAmbient, materialDiffuse
-        , materialSpecular, materialShininess));
+        return new Mash(vertices,texture,new Material(specularTexture,materialShininess));
     }
 
 }

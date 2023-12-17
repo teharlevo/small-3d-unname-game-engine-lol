@@ -5,7 +5,7 @@ import java.util.List;
 
 import main.Assets;
 import modeling.Model;
-import modeling.light.LightSource;
+import render.light.LightSource;
 
 public class Renderer {
     private RenderrInformationHolder RIH;

@@ -1,24 +1,4 @@
 package render;
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glBufferSubData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
-import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 import static org.lwjgl.opengl.GL43.*;
 
 import java.nio.FloatBuffer;
@@ -234,9 +214,10 @@ public class RenderBatch {
         glDisableVertexAttribArray(1);
 
         for (int i = 0; i < texsUseCount; i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
             texUseThisFrame[i].unbind();
+            glBindTexture(GL_TEXTURE_2D, 0);
         }
-        glBindTexture(GL_TEXTURE_2D, 0);
 
         s.detach();
     }
@@ -268,9 +249,11 @@ public class RenderBatch {
     private void sandInformationToGPU(Camrea c){
         
         if(theMash.getTexture() != null){
+            s.uploadInt("texture", texsUseCount); 
             texUseThisFrame[texsUseCount] =  theMash.getTexture();
             texsUseCount ++;
         }
+
         RIHInformationToGPU();
         s.uploadMat4f("uView",c.getViewMatrix());
 
@@ -286,13 +269,18 @@ public class RenderBatch {
         s.uploadVec3f("viewPos",
         c.getPos());
         father.activetedLightSources();
-        theMash.getMaterial().sandToGPU(s);
+        s.uploadfloat("material.shininess",theMash.getMaterial().getShininess() );
+
+        if(theMash.getMaterial().getSpecularTexture() != null){
+            s.uploadInt("material.specular", texsUseCount);
+            texUseThisFrame[texsUseCount] =  theMash.getMaterial().getSpecularTexture();
+            texsUseCount ++;
+        }
     
         for (int i = 0; i < texsUseCount; i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             texUseThisFrame[i].bind();
         }
-        s.uploadIntArray("uTex_Sampler",texSlat);
 
     }
 

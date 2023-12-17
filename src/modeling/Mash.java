@@ -5,8 +5,8 @@ import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
 import main.Assets;
 import main.Window;
-import modeling.light.Material;
 import render.Texture;
+import render.light.Material;
 
 public class Mash {
 

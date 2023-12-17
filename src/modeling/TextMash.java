@@ -4,8 +4,7 @@ import org.joml.Vector3f;
 
 import fontPancking.FontLoader;
 import main.Assets;
-import main.Window;
-import modeling.light.Material;
+import render.light.Material;
 
 public class TextMash {
     private Mash mash;
@@ -15,15 +14,13 @@ public class TextMash {
     public TextMash(String _text,FontLoader _font){
         text = _text;
         font = _font;
-        mash = new Mash(makeVerties(text), font.getTexture(),new Material(
-            new Vector3f(1),new Vector3f(0),new Vector3f(0), 0));
+        mash = new Mash(makeVerties(text), font.getTexture(),new Material(null,0));
     }
 
     public TextMash(String _text,String fontName){
         text = _text;
         font = Assets.getFontLoader(fontName);
-        mash = new Mash(makeVerties(text), font.getTexture(),new Material(
-            new Vector3f(1),new Vector3f(0),new Vector3f(0), 0));
+        mash = new Mash(makeVerties(text), font.getTexture(),new Material(null,0));
     }
 
     public void cangeText(String _text){
@@ -42,8 +39,8 @@ public class TextMash {
                 float[] charCords = font.charCoreds(text.charAt(i));
                 for (int j = 0; j < 6; j++) {
                 int offset = i * 8 * 6 + j * 8;
-                float Xoffset = charCords[4];
-                float Yoffset = charCords[5];
+                //float Xoffset = charCords[4];
+                //float Yoffset = charCords[5];
                 verties[offset    ] = poscords[j*2] *     charCords[2] + addx;
                 verties[offset + 1] = poscords[j*2 + 1] * charCords[3] + addy;
                 verties[offset + 2] =  0;

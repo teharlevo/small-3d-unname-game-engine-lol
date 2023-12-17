@@ -10,12 +10,11 @@ import Sound.SoundMaster;
 import main.Input;
 import main.Scene;
 import main.Window;
-import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
-import modeling.light.LightSource;
 import render.FrameBuffer;
 import render.Renderer;
+import render.light.LightSource;
 
 public class TestScene extends Scene{
 
@@ -25,12 +24,12 @@ public class TestScene extends Scene{
         new Window(900,600,"test",true);
     }
 
-    Model k[] = new Model[500];
+    Model k[] = new Model[200];
     Entity light;
     Renderer g;
     public void init() {
         Random r = new Random();
-        float dis = 10;
+        float dis = 7;
         String[] modelName = new String[]{"bob"};
         for (int i = 0; i < k.length; i++) {
             Entity entt = new Entity();
