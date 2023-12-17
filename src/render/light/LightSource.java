@@ -22,6 +22,7 @@ public class LightSource extends Component{
     public void sandToGPU(Shader shader){
         shader.uploadVec3f("light.pos", new Vector3f(pos.x + object().getPos().x
         ,pos.y + object().getPos().y,pos.z + object().getPos().z));
+        //System.out.println(ambient.toString());
         shader.uploadVec3f("light.ambient", ambient);
         shader.uploadVec3f("light.diffuse", diffuse);
         shader.uploadVec3f("light.specular", specular);

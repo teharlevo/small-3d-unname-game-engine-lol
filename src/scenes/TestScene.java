@@ -24,13 +24,13 @@ public class TestScene extends Scene{
         new Window(900,600,"test",true);
     }
 
-    Model k[] = new Model[200];
+    Model k[] = new Model[10];
     Entity light;
     Renderer g;
     public void init() {
         Random r = new Random();
-        float dis = 7;
-        String[] modelName = new String[]{"bob"};
+        float dis = 3;
+        String[] modelName = new String[]{"backpack"};
         for (int i = 0; i < k.length; i++) {
             Entity entt = new Entity();
             entt.setPos(

@@ -52,19 +52,19 @@ out vec4 color;
 
 void main()
 {
-    vec3 ambient = vec3(0.1);
+    color = fColor * texture(texture, vec2(fTexCoords.x,fTexCoords.y ));
+    vec3 ambient = light.ambient * color.xyz;
 
     vec3 norm = normalize(fNormal);
     vec3 lightDir = normalize(light.pos - fPos);  
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * light.diffuse;
-    color = fColor * texture(texture, vec2(fTexCoords.x,fTexCoords.y ));
+    vec3 diffuse = diff * light.diffuse * color.xyz;
 
     vec3 viewDir = normalize(viewPos - fPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = spec * light.specular; 
+    vec3 specular = spec * light.specular * texture(material.specular, vec2(fTexCoords.x,fTexCoords.y )).xyz ; 
 
-    vec3 result = (ambient + diffuse + specular) * color.xyz;
+    vec3 result = (ambient + diffuse + specular);
     color = vec4(result,color.a);
 }
