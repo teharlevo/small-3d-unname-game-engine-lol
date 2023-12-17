@@ -30,7 +30,7 @@ public class TestScene extends Scene{
     public void init() {
         Random r = new Random();
         float dis = 3;
-        String[] modelName = new String[]{"backpack"};
+        String[] modelName = new String[]{"bob"};
         for (int i = 0; i < k.length; i++) {
             Entity entt = new Entity();
             entt.setPos(
@@ -164,7 +164,7 @@ public class TestScene extends Scene{
         float lx = light.getPos().x;
         float ly = light.getPos().y;
         float lz = light.getPos().z;
-        float lightSpeed = 2;
+        float lightSpeed = 5;
 
         if(Input.getKeyPress("right")){
             lx += dt * lightSpeed;

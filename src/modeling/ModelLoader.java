@@ -37,7 +37,7 @@ public class ModelLoader {
             System.arraycopy(oldVertices, 0, vertices, 0, fal);  
             System.arraycopy(addedVertices, 0, vertices, fal, sal);  
         }
-        //materialImporting(scene,0);
+        materialImporting(scene,0);
         String texName = new File(path).getName();
         texName = texName.substring(0, texName.indexOf("."));
         texture = Assets.getTexture(texName);
@@ -54,15 +54,19 @@ public class ModelLoader {
     private void materialImporting(AIScene scene,int pointer){
 
         //לתקן מתישהו
-        PointerBuffer materials = scene.mMaterials();
-        AIMaterial material = AIMaterial.create(materials.get(pointer));
-        PointerBuffer properties = material.mProperties();
-        for ( int j = 0; j < properties.remaining(); j++ ) {
-            AIMaterialProperty prop = AIMaterialProperty.create(properties.get(j));
-        }
-        material.close();
+        //PointerBuffer materials = scene.mMaterials();
+        //AIMaterial material = AIMaterial.create(materials.get(pointer));
+        //PointerBuffer properties = material.mProperties();
+        //for ( int j = 0; j < properties.remaining(); j++ ) {
+        //    AIMaterialProperty prop = AIMaterialProperty.create(properties.get(j));
+        //    if(prop.mKey().dataString().equals("$mat.shininess")){
+        //        materialShininess = prop.mData().get();
+        //        System.out.println(prop.mData().get());
+        //        break;
+        //    }
+        //}
+        //material.close();
         materialShininess = 32;
-
     }
 
     private float[] processMash(AIMesh mash){
