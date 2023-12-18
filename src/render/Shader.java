@@ -18,12 +18,8 @@ public class Shader {
     private String vertexsrc;
     
     private String frgmntsrc;
-
-    private String computesrc = null;
     
-    private int vertexID,frgmntID,computID, SP;
-
-    private boolean compute = false;
+    private int vertexID,frgmntID, SP;
 
     private boolean isuse = false;
 
@@ -44,9 +40,6 @@ public class Shader {
                 vertexsrc = splitString[1];
             } else if (firstpetern.equals("fragment")) {
                 frgmntsrc = splitString[1];
-            } else if (firstpetern.equals("compute")){
-                computesrc = splitString[1];
-                compute = true;
             }
             else{
                 throw new IOException("Unexpected token '" + firstpetern + "'");
@@ -56,7 +49,7 @@ public class Shader {
                 vertexsrc = splitString[2];
             } else if (srcendpetern.equals("fragment")) {
                 frgmntsrc = splitString[2];
-            } else if(!compute) {
+            } else {
                 throw new IOException("Unexpected token '" + srcendpetern + "'");
             }
 
@@ -65,41 +58,18 @@ public class Shader {
             e.printStackTrace();
             System.out.println("import file dont work " + " PATH " + path);
         }
+        compile();
+    }
+
+    public  Shader(String _vertexsrc,String _frgmntsrc){
+        vertexsrc = _vertexsrc;
+        frgmntsrc = _frgmntsrc;
+        compile();
     }
 
     public void compile(){
-        if(compute){
-            computID = glCreateShader(GL_COMPUTE_SHADER);
-        
-            glShaderSource(computID, computesrc);
-            glCompileShader(computID);
-
-            // בודק בעיות
-            int success = glGetShaderi(computID,GL_COMPILE_STATUS);
-
-            if(success == GL_FALSE){
-                int len = glGetShaderi(computID,GL_INFO_LOG_LENGTH);
-                System.out.println("COMPILE shader compilation failed.");
-                System.out.println(glGetShaderInfoLog(computID, len));
-                assert false : "";
-            }
-
-            SP = glCreateProgram();
-            glAttachShader(SP, computID);
-            glLinkProgram(SP);
-
-            success = glGetProgrami(SP, GL_LINK_STATUS);
-
-            if(success == GL_FALSE){
-                int len = glGetProgrami(SP,GL_INFO_LOG_LENGTH);
-                System.out.println("Linking of shaders failed. but on COMPILE shader compilation");
-                System.out.println(glGetProgramInfoLog(SP, len));
-                assert false : "";
-            }
-            return;
-        }
         vertexID = glCreateShader(GL_VERTEX_SHADER);
-        
+        System.out.println(vertexsrc);
         glShaderSource(vertexID, vertexsrc);
         glCompileShader(vertexID);
 

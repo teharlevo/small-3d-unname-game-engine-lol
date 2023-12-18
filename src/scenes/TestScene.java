@@ -5,6 +5,7 @@ import java.util.Random;
 import main.Assets;
 import main.Entity;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL;
 
 import Sound.SoundMaster;
 import main.Input;
@@ -30,14 +31,14 @@ public class TestScene extends Scene{
     public void init() {
         Random r = new Random();
         float dis = 3;
-        String[] modelName = new String[]{"bob"};
+        String[] modelName = new String[]{"backpack"};
         for (int i = 0; i < k.length; i++) {
             Entity entt = new Entity();
             entt.setPos(
                 r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
             entt.setAngle(r.nextFloat(-180, 180),r.nextFloat(-180, 180),r.nextFloat(-180, 180));
             k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
-            //sk[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
+            //k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
             entt.addComponent(k[i]);
         }
         Model colorModel = new Model(modelName[r.nextInt(modelName.length)],0,0,0); 
@@ -55,8 +56,7 @@ public class TestScene extends Scene{
     boolean lines = false;
 
     public void update(float dt) {
-        render();
-        //g.render();
+        render();;
         float x = 0;
         float y = 0;
         
