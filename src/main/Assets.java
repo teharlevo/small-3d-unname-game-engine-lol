@@ -139,12 +139,7 @@ public class Assets {
         String[] shaders = shaderList.split("\n");
         for (int i = 0; i < shaders.length; i++) {
             String[] shaderInfo = shaders[i].split(",");
-            System.out.println(shaderInfo[0]);
-            System.out.println(getFragmentShader(shaderInfo[2]) + "lolol");
-            System.out.println(shaderInfo[2]);
-
-            newShader(shaderInfo[0],
-            shaderInfo[1],shaderInfo[2]);
+            newShader(shaderInfo[0],shaderInfo[1],shaderInfo[2]);
         }
     }
     

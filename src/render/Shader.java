@@ -69,7 +69,7 @@ public class Shader {
 
     public void compile(){
         vertexID = glCreateShader(GL_VERTEX_SHADER);
-        System.out.println(vertexsrc);
+        
         glShaderSource(vertexID, vertexsrc);
         glCompileShader(vertexID);
 

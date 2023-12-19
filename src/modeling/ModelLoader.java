@@ -6,8 +6,6 @@ import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIVector3D;
 import org.lwjgl.assimp.Assimp;
-import org.lwjgl.assimp.AIMaterial;
-import org.lwjgl.assimp.AIMaterialProperty;
 
 import main.Assets;
 import render.Texture;

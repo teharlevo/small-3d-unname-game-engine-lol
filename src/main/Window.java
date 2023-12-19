@@ -201,6 +201,10 @@ public class Window {
         return height;
     }
 
+    public static long getWindow(){
+        return window;
+    }
+
     public static float time(){
         return time;
     }

@@ -11,11 +11,13 @@ import Sound.SoundMaster;
 import main.Input;
 import main.Scene;
 import main.Window;
+import modeling.Mash;
 import modeling.Model;
 import modeling.ModelShape;
 import render.FrameBuffer;
 import render.Renderer;
 import render.light.LightSource;
+import render.light.Material;
 
 public class TestScene extends Scene{
 
@@ -30,18 +32,49 @@ public class TestScene extends Scene{
     Renderer g;
     public void init() {
         Random r = new Random();
-        float dis = 3;
-        String[] modelName = new String[]{"backpack"};
+        int x = 10;
+        int y = 10;
+        float size = 800;
+        float[] vertex = new float[8 * x * y * 6];
+        float[] addShit = new float[]{0,0,1,0,1,1,1,1,0,1,0,0};
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                for (int t = 0; t < 6; t++) {
+                    int miniOffset = t * 2;
+                    int offset = i * x * 8 * 6+ j * 8 * 6 + t * 8;
+                    vertex[offset]     = addShit[miniOffset] + i;
+                    vertex[offset + 1] = r.nextFloat(-0.1f, 0.1f);
+                    vertex[offset + 2] = addShit[miniOffset + 1] + j;
+                    vertex[offset + 3] = 0;
+                    vertex[offset + 4] = 1;
+                    vertex[offset + 5] = 0;
+                    vertex[offset + 6] = (float)(addShit[miniOffset    ] + (i))/(float)(x); 
+                    vertex[offset + 7] = (float)(addShit[miniOffset + 1] + (j))/(float)(y); 
+                }
+            }
+        }
+        Mash grund = new Mash(vertex, "4", new Material(null,256));
+        Entity t = new Entity();
+        t.addComponent(new Model(grund, 0,0,0));
+
+        float dis = 5f;
+        String[] modelName = new String[]{"tree","tree2","tree4"};
+        for (int i = 0; i < modelName.length; i++) {
+            Assets.getModelMesh(modelName[i]).getMaterial().setShininess(1);
+        }
         for (int i = 0; i < k.length; i++) {
             Entity entt = new Entity();
             entt.setPos(
-                r.nextFloat(-dis, dis), r.nextFloat(-dis, dis),r.nextFloat(-dis, dis));
-            entt.setAngle(r.nextFloat(-180, 180),r.nextFloat(-180, 180),r.nextFloat(-180, 180));
+                r.nextFloat(-dis, dis),0,r.nextFloat(-dis, dis));
+            entt.setAngle(r.nextFloat(-15,15),r.nextFloat(-180,180),r.nextFloat(-15,15));
             k[i] = new Model(modelName[r.nextInt(modelName.length)],0,0,0);
+            k[i].getMash().getMaterial().setShininess(1);
+            k[i].setScale(r.nextFloat(0.008f,0.012f) ,r.nextFloat(0.008f,0.012f)
+            ,r.nextFloat(0.008f,0.012f) );
             //k[i].setColor(r.nextFloat(),r.nextFloat(),r.nextFloat(),r.nextFloat());
             entt.addComponent(k[i]);
         }
-        Model colorModel = new Model(modelName[r.nextInt(modelName.length)],0,0,0); 
+        Model colorModel = new Model("bob",0,0,0); 
         light = new Entity();
         light.addComponent(colorModel);
         LightSource lightSource = 
@@ -58,48 +91,31 @@ public class TestScene extends Scene{
     public void update(float dt) {
         render();;
         float x = 0;
-        float y = 0;
+        float speed = 10.0f;
         
-        if(Input.getKeyPress("w")){
-            x += 5.0f;
+        if(Input.getMouseButtonPress(0)){
+            x += speed;
         }
-        if(Input.getKeyPress("s")){
-            x -= 5.0f;
-        }
-        if(Input.getKeyPress("a")){
-            y += 5.0f;
-        }
-        if(Input.getKeyPress("d")){
-            y -= 5.0f;
+        if(Input.getMouseButtonPress(1)){
+            x -= speed;
         }
         cam.getPos().add(cam.getLookDir().mul(x * dt,new Vector3f()));
-        cam.setAngle(cam.getAngleX(), cam.getAngleY() + 90, cam.getAngleZ());
-        cam.getPos().add(cam.getLookDir().mul(y * dt,new Vector3f()));
-        cam.setAngle(cam.getAngleX(), cam.getAngleY() - 90, cam.getAngleZ());
         
-        float angleX = 0;
-        float angleY = 0;
-        float angleZ = 0;
-
-        if(Input.getKeyPress("q")){
-            angleX += 90.0f;
+        float angleX = cam.getAngleX();
+        float angleY = cam.getAngleY();
+        float angleSpeed = 1000.0f;
+        Input.mouseToCenterOFscreen();
+        angleX += (-(float)Input.getMousePosY() + (float)Window.height()/2)/(float)Window.height() * angleSpeed * dt;
+        angleY += (((float)Input.getMousePosX() - (float)Window.width()/2)/(float)Window.width() ) * angleSpeed * dt;
+        
+        float limit = 80;
+        if(angleX > limit){
+            angleX = limit;
         }
-        if(Input.getKeyPress("e")){
-            angleX -= 90.0f;
+        else if(angleX < -limit){
+            angleX = -limit;
         }
-        if(Input.getKeyPress("c")){
-            angleY -= 90.0f;
-        }
-        if(Input.getKeyPress("v")){
-            angleY += 90.0f;
-        }
-        if(Input.getKeyPress("k")){
-            angleZ += 90.0f;
-        }
-        if(Input.getKeyPress("j")){
-            angleZ -= 90.0f;
-        }
-        cam.setAngle(cam.getAngleX() + angleX * dt, cam.getAngleY() + angleY * dt,cam.getAngleZ() + angleZ * dt);
+        cam.setAngle(angleX,angleY,0);
 
         if(Input.getKeyPress("r")){
             cam.setPerspective(cam.getFoV() + dt * 10);

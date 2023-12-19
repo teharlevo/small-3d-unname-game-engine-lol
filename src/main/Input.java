@@ -1,12 +1,13 @@
 package main;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Input  {
+public class Input{
 
     private static int[] keyNums = new int[]{32,39,44,45,46,47,48,49,50,51,52,53,54,55,56,57,59,61,65,66,67,68,69
         ,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,96,256,257,258,259,260,261,262,263
@@ -43,7 +44,6 @@ public class Input  {
 
     public static void update(long window){
         keyPrassNowList = new ArrayList<>();
-
         keyPressedNow = new boolean[350];
         mouseButtonPressedNow = new boolean[3];
         glfwSetCursorPosCallback(window, Input::mousePosCallback);
@@ -82,6 +82,10 @@ public class Input  {
 
     public static float getMousePosY(){
         return posY;
+    }
+
+    public static void mouseToCenterOFscreen(){
+        glfwSetCursorPos(Window.getWindow(),Window.width()/2,Window.height()/2);
     }
 
     public static boolean getKeyPress(int key){
